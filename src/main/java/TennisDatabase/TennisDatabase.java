@@ -49,6 +49,8 @@ public void parseLine(String s) {
         players.printAllPlayers();
     }
     public ArrayList<TennisPlayer> returnAllPlayers() {return players.returnAllTennisPlayers();}
+    public ArrayList<TennisMatch> returnAllMatches() {return (ArrayList<TennisMatch>) matches.returnMatches();};
+
 
 
     public void printMatchesOfPlayer(String playerId) {

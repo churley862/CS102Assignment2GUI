@@ -56,7 +56,7 @@ public class TennisMatch {
         return match.toUpperCase();
     }
 
-    private String dateToString(int year, int month, int day) {
+    public String dateToString(int year, int month, int day) {
         String date = "";
         date += year;
         if (month<10){

@@ -35,4 +35,7 @@ public class TennisMatchesContainer {
         }
         return allMatches;
     }
+    public List<TennisMatch> returnMatches(){
+        return matches;
+    }
 }

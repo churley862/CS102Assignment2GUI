@@ -33,6 +33,10 @@ public class Assignment2 extends Application {
     private TableView table = new TableView();
     private TennisDatabase tennisDatabase = new TennisDatabase();
 
+    public void returnbutton(Stage stage){
+
+    }
+
     public String fileChooser(Stage stage) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(
@@ -41,6 +45,62 @@ public class Assignment2 extends Application {
         fileChooser.setInitialDirectory(new File(currentPath));
         File selectedFile = fileChooser.showOpenDialog(stage);
         return selectedFile.getName();
+    }
+    private void buttonPrintMatches(Stage stage) {
+        Scene scene = new Scene(new Group());
+        stage.setTitle("Matches list");
+        stage.setWidth(300);
+        stage.setHeight(500);
+
+        final Label label = new Label("Matches List");
+        label.setFont(new Font("Arial", 20));
+
+        table.setEditable(true);
+
+        ArrayList<TennisMatch> matcheslist = tennisDatabase.returnAllMatches();
+        TableView<Integer> table = new TableView<>();
+        for (int i =0; i < matcheslist.size(); i++){
+            table.getItems().add(i);
+        }
+        TableColumn<Integer,String > player1IDCol = new TableColumn<>("Player 1 ID");
+        player1IDCol.setCellValueFactory(cellData -> {
+            Integer rowIndex = cellData.getValue();
+            return new ReadOnlyStringWrapper(matcheslist.get(rowIndex).getPlayer1Id());
+        });
+        TableColumn<Integer,String > player2IDCol = new TableColumn<>("Player 2 ID");
+        player2IDCol.setCellValueFactory(cellData -> {
+            Integer rowIndex = cellData.getValue();
+            return new ReadOnlyStringWrapper(matcheslist.get(rowIndex).getPlayer2Id());
+        });
+        TableColumn<Integer,String > scoreCol = new TableColumn<>("Score");
+        scoreCol.setCellValueFactory(cellData -> {
+            Integer rowIndex = cellData.getValue();
+            return new ReadOnlyStringWrapper(matcheslist.get(rowIndex).getScore());
+        });
+        TableColumn<Integer,String > dateCol = new TableColumn<>("Date");
+        dateCol.setCellValueFactory(cellData -> {
+            Integer rowIndex = cellData.getValue();
+            return new ReadOnlyStringWrapper(matcheslist.get(rowIndex).dateToString(matcheslist.get(rowIndex).getDateYear()
+                    ,matcheslist.get(rowIndex).getDateMonth(),matcheslist.get(rowIndex).getDateDay()));
+        });
+        TableColumn<Integer,String> tounCol = new TableColumn<>("Location");
+        tounCol.setCellValueFactory(cellData -> {
+            Integer rowIndex = cellData.getValue();
+            return new ReadOnlyStringWrapper( (matcheslist.get(rowIndex).getTournament()));
+        });
+
+        table.getColumns().addAll(player1IDCol,player2IDCol, dateCol, scoreCol,tounCol);
+
+        final VBox vbox = new VBox();
+        vbox.setSpacing(5);
+        vbox.setPadding(new Insets(10, 0, 0, 10));
+        vbox.getChildren().addAll(label, table);
+
+        ((Group) scene.getRoot()).getChildren().addAll(vbox);
+
+        stage.setScene(scene);
+        stage.show();
+
     }
     private void buttonSubmitInsertPlayer(Stage stage, String playerText) {
         tennisDatabase.parseLine(playerText);
@@ -55,14 +115,6 @@ public class Assignment2 extends Application {
         label.setFont(new Font("Arial", 20));
 
         table.setEditable(true);
-        //TableColumn locationCol = new TableColumn("Location");
-        //TableColumn playerIDCol = new TableColumn("PlayerID");
-        //TableColumn firstNameCol = new TableColumn("First Name");
-        //firstNameCol.setMinWidth(100);
-       // firstNameCol.setCellValueFactory(new PropertyValueFactory<>, String>("firstName")););
-
-        //TableColumn lastNameCol = new TableColumn("Last Name");
-        //TableColumn yearCol = new TableColumn("Year");
 
         ArrayList<TennisPlayer> playerlist = tennisDatabase.returnAllPlayers();
         TableView<Integer> table = new TableView<>();
@@ -241,6 +293,7 @@ public class Assignment2 extends Application {
         Button button2 = new Button("Import");
         Button insert = new Button("Insert New Player or match");
         Button printPlayers = new Button("Print all Players");
+        Button printMatches = new Button("Print all Matches");
         button1.setOnAction(event -> {
             buttonExport(primaryStage);
         });
@@ -253,12 +306,16 @@ public class Assignment2 extends Application {
         printPlayers.setOnAction(event -> {
             buttonPrintPlayers(primaryStage);
         });
+        printMatches.setOnAction(event -> {
+            buttonPrintMatches(primaryStage);
+        });
         VBox root = new VBox();
-        root.getChildren().addAll(button1, button2,insert,printPlayers);
+        root.getChildren().addAll(button1, button2,insert,printPlayers,printMatches);
         primaryStage.setScene(new Scene(root, 500, 575));
         primaryStage.show();
 
     }
+
 
 
 
