@@ -80,7 +80,7 @@ public class Assignment2 extends Application {
     private void buttonPrintMatches(Stage stage) {
         Scene scene = new Scene(new Group());
         stage.setTitle("Matches list");
-        stage.setWidth(300);
+        stage.setWidth(500);
         stage.setHeight(500);
 
         final Label label = new Label("Matches List");
@@ -349,6 +349,7 @@ public class Assignment2 extends Application {
         Button printPlayers = new Button("Print all Players");
         Button printMatches = new Button("Print all Matches");
         Button deletePlayer = new Button("Delete Player By ID");
+        Button resetDatabase = new Button("Reset Database");
         button1.setOnAction(event -> {
             buttonExport(primaryStage);
         });
@@ -367,14 +368,41 @@ public class Assignment2 extends Application {
         deletePlayer.setOnAction(event -> {
             buttonDeletePlayer(primaryStage);
         });
+        resetDatabase.setOnAction(event -> {
+           buttonResetDatabase(primaryStage);
+        });
 
         VBox root = new VBox();
-        root.getChildren().addAll(button1, button2,insert,printPlayers,printMatches,deletePlayer);
+        root.getChildren().addAll(button1, button2,insert,printPlayers,printMatches,deletePlayer,resetDatabase);
         primaryStage.setScene(new Scene(root, 500, 575));
         primaryStage.show();
 
     }
 
+    private void buttonResetDatabase(Stage stage) {
+        Button button1 = new Button("Cancel");
+        Button button2 = new Button("Continue");
+        button1.setOnAction(event -> {
+            try {
+                start(stage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        button2.setOnAction(event -> {
+            try {
+                tennisDatabase.reset();
+                start(stage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        HBox rootH1 = new HBox();
+        rootH1.getChildren().addAll(button1,button2);
+        stage.setTitle("Reset Database confirmation");
+        stage.setScene(new Scene(rootH1, 300,300));
+
+    }
 
 
     public static void main(String[] args) {
