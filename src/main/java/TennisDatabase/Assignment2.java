@@ -33,7 +33,7 @@ public class Assignment2 extends Application {
     private TableView table = new TableView();
     private TennisDatabase tennisDatabase = new TennisDatabase();
 
-    public void returnbutton(Stage stage){
+    public void returnButton(Stage stage){
 
     }
 
@@ -45,6 +45,37 @@ public class Assignment2 extends Application {
         fileChooser.setInitialDirectory(new File(currentPath));
         File selectedFile = fileChooser.showOpenDialog(stage);
         return selectedFile.getName();
+    }
+    private void buttonDeletePlayer(Stage stage) {
+        stage.setTitle("Delete a Tennis Player");
+        TextField text = new TextField("Delete a player by ID");
+        Button button1 = new Button("Submit");
+        Button button2 = new Button("Cancel");
+        Scene scene = new Scene(new Group());
+        HBox rootH1 = new HBox();
+        HBox rootH2 = new HBox();
+        VBox root = new VBox();
+
+        rootH1.getChildren().addAll(text);
+        rootH2.getChildren().addAll(button1, button2);
+        rootH1.setAlignment(Pos.CENTER);
+        rootH2.setAlignment(Pos.CENTER);
+        root.setAlignment(Pos.CENTER);
+        root.getChildren().addAll(rootH1, rootH2);
+        button1.setOnAction(event -> {
+            buttonSubmitDeletePlayer(stage, text.getText());
+            try {
+                start(stage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        stage.setScene(new Scene(root, 500, 575));
+        stage.show();
+    }
+
+    private void buttonSubmitDeletePlayer(Stage stage, String text) {
+        tennisDatabase.removePlayer(tennisDatabase.searchTennisPlayer(text));
     }
     private void buttonPrintMatches(Stage stage) {
         Scene scene = new Scene(new Group());
@@ -90,11 +121,22 @@ public class Assignment2 extends Application {
         });
 
         table.getColumns().addAll(player1IDCol,player2IDCol, dateCol, scoreCol,tounCol);
+        Button button1 = new Button("Done");
+        button1.setOnAction(event -> {
+            try {
+                start(stage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        HBox rootH1 = new HBox();
+        rootH1.getChildren().addAll(button1);
+
 
         final VBox vbox = new VBox();
         vbox.setSpacing(5);
         vbox.setPadding(new Insets(10, 0, 0, 10));
-        vbox.getChildren().addAll(label, table);
+        vbox.getChildren().addAll(label, table, rootH1);
 
         ((Group) scene.getRoot()).getChildren().addAll(vbox);
 
@@ -149,10 +191,22 @@ public class Assignment2 extends Application {
 
         table.getColumns().addAll(playerIDCol,firstNameCol, lastNameCol, yearCol,locationCol);
 
+        Button button1 = new Button("Done");
+        button1.setOnAction(event -> {
+            try {
+                start(stage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        HBox rootH1 = new HBox();
+        rootH1.getChildren().addAll(button1);
+
+
         final VBox vbox = new VBox();
         vbox.setSpacing(5);
         vbox.setPadding(new Insets(10, 0, 0, 10));
-        vbox.getChildren().addAll(label, table);
+        vbox.getChildren().addAll(label, table,rootH1);
 
         ((Group) scene.getRoot()).getChildren().addAll(vbox);
 
@@ -294,6 +348,7 @@ public class Assignment2 extends Application {
         Button insert = new Button("Insert New Player or match");
         Button printPlayers = new Button("Print all Players");
         Button printMatches = new Button("Print all Matches");
+        Button deletePlayer = new Button("Delete Player By ID");
         button1.setOnAction(event -> {
             buttonExport(primaryStage);
         });
@@ -309,13 +364,16 @@ public class Assignment2 extends Application {
         printMatches.setOnAction(event -> {
             buttonPrintMatches(primaryStage);
         });
+        deletePlayer.setOnAction(event -> {
+            buttonDeletePlayer(primaryStage);
+        });
+
         VBox root = new VBox();
-        root.getChildren().addAll(button1, button2,insert,printPlayers,printMatches);
+        root.getChildren().addAll(button1, button2,insert,printPlayers,printMatches,deletePlayer);
         primaryStage.setScene(new Scene(root, 500, 575));
         primaryStage.show();
 
     }
-
 
 
 
