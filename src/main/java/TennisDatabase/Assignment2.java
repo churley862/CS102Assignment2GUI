@@ -2,6 +2,8 @@ package main.java.TennisDatabase;
 
 import javafx.application.Application;
 import javafx.beans.property.Property;
+import javafx.beans.property.ReadOnlyIntegerWrapper;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
@@ -53,15 +55,45 @@ public class Assignment2 extends Application {
         label.setFont(new Font("Arial", 20));
 
         table.setEditable(true);
-        TableColumn locationCol = new TableColumn("Location");
-        TableColumn playerIDCol = new TableColumn("PlayerID");
-        TableColumn firstNameCol = new TableColumn("First Name");
-        firstNameCol.setMinWidth(100);
+        //TableColumn locationCol = new TableColumn("Location");
+        //TableColumn playerIDCol = new TableColumn("PlayerID");
+        //TableColumn firstNameCol = new TableColumn("First Name");
+        //firstNameCol.setMinWidth(100);
        // firstNameCol.setCellValueFactory(new PropertyValueFactory<>, String>("firstName")););
 
-        TableColumn lastNameCol = new TableColumn("Last Name");
-        TableColumn yearCol = new TableColumn("Year");
+        //TableColumn lastNameCol = new TableColumn("Last Name");
+        //TableColumn yearCol = new TableColumn("Year");
 
+        ArrayList<TennisPlayer> playerlist = tennisDatabase.returnAllPlayers();
+        TableView<Integer> table = new TableView<>();
+        for (int i =0; i < playerlist.size(); i++){
+            table.getItems().add(i);
+        }
+        TableColumn<Integer,String > playerIDCol = new TableColumn<>("Player ID");
+        playerIDCol.setCellValueFactory(cellData -> {
+            Integer rowIndex = cellData.getValue();
+            return new ReadOnlyStringWrapper(playerlist.get(rowIndex).getId());
+        });
+        TableColumn<Integer,String > locationCol = new TableColumn<>("Birth Location");
+        locationCol.setCellValueFactory(cellData -> {
+            Integer rowIndex = cellData.getValue();
+            return new ReadOnlyStringWrapper(playerlist.get(rowIndex).getCountry());
+        });
+        TableColumn<Integer,String > firstNameCol = new TableColumn<>("First name");
+        firstNameCol.setCellValueFactory(cellData -> {
+            Integer rowIndex = cellData.getValue();
+            return new ReadOnlyStringWrapper(playerlist.get(rowIndex).getFirstName());
+        });
+        TableColumn<Integer,String > lastNameCol = new TableColumn<>("Last name");
+        lastNameCol.setCellValueFactory(cellData -> {
+            Integer rowIndex = cellData.getValue();
+            return new ReadOnlyStringWrapper(playerlist.get(rowIndex).getLastName());
+        });
+        TableColumn<Integer,String> yearCol = new TableColumn<>("Birth year");
+        playerIDCol.setCellValueFactory(cellData -> {
+            Integer rowIndex = cellData.getValue();
+            return new ReadOnlyStringWrapper( (playerlist.get(rowIndex).getId()));
+        });
 
         table.getColumns().addAll(playerIDCol,firstNameCol, lastNameCol, yearCol,locationCol);
 

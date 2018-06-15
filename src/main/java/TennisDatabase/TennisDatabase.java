@@ -3,6 +3,7 @@ import java.io.PrintWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class TennisDatabase{
@@ -47,6 +48,7 @@ public void parseLine(String s) {
     public void printAllPlayers() {
         players.printAllPlayers();
     }
+    public ArrayList<TennisPlayer> returnAllPlayers() {return players.returnAllTennisPlayers();}
 
 
     public void printMatchesOfPlayer(String playerId) {

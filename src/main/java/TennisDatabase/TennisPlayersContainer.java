@@ -1,5 +1,7 @@
 package main.java.TennisDatabase;
 
+import java.util.ArrayList;
+
 public class TennisPlayersContainer {
     TennisPlayerNode root;
 
@@ -68,6 +70,19 @@ public class TennisPlayersContainer {
             node = getPlayerById(match.getPlayer2Id());
         }
         node.insertMatch(match);
+    }
+    public ArrayList<TennisPlayer> returnAllTennisPlayers(){
+
+        return returnAllTennisPlayers(root);
+    }
+
+    private ArrayList<TennisPlayer> returnAllTennisPlayers(TennisPlayerNode node) {
+        ArrayList<TennisPlayer> tennisPlayerList = new ArrayList<TennisPlayer>();
+        if (node == null){return tennisPlayerList;}
+        tennisPlayerList = (returnAllTennisPlayers(node.getLeft()));
+        tennisPlayerList.add(node.getPlayer());
+        tennisPlayerList.addAll(returnAllTennisPlayers(node.getRight()));
+        return tennisPlayerList;
     }
 
 
