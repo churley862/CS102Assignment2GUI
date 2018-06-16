@@ -1,4 +1,4 @@
-package main.java.TennisDatabase;
+package TennisDatabase;
 
 import java.util.ArrayList;
 import java.util.Collections;

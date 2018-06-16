@@ -1,54 +1,29 @@
-package main.java.TennisDatabase;
 
 import gui.VerticalButtonBar;
 import javafx.application.Application;
-import javafx.beans.property.Property;
-import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 
+import TennisDatabase.*;
 
 public class Assignment2 extends Application {
     private TableView table = new TableView();
     private TennisDatabase tennisDatabase = new TennisDatabase();
 
-    public void returnbutton(Stage stage){
-
-    }
-
-    public String fileChooser(Stage stage) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Text Files", "*.txt"));
-        String currentPath = Paths.get(".").toAbsolutePath().normalize().toString();
-        fileChooser.setInitialDirectory(new File(currentPath));
-        File selectedFile = fileChooser.showOpenDialog(stage);
-        return selectedFile.getName();
-    }
     private void buttonPrintMatches(Stage stage) {
         Scene scene = new Scene(new Group());
         stage.setTitle("Matches list");
@@ -105,6 +80,7 @@ public class Assignment2 extends Application {
         stage.show();
 
     }
+
     private void buttonSubmitInsertPlayer(Stage stage, String playerText) {
         tennisDatabase.parseLine(playerText);
     }
@@ -191,23 +167,7 @@ public class Assignment2 extends Application {
         stage.setScene(new Scene(root, 500, 575));
         stage.show();
     }
-    public void buttonSubmitExport(Stage stage, String filename) throws FileNotFoundException, UnsupportedEncodingException {
-        try {
-            tennisDatabase.exportToFile(filename);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }try {
-            start(stage);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-    }
-    private void buttonSubmitImport(Stage stage, String text) throws FileNotFoundException {
-        tennisDatabase.loadFromFile(text);
-    }
     private void buttonImport(Stage stage) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Import Tennis Players");
@@ -238,23 +198,13 @@ public class Assignment2 extends Application {
         }
     }
 
-    private static final Color color = Color.web("#FF00FF");
+    private Pane playerPane;
+    private Pane matchPane;
 
-    //TennisDatabase tennisDatabase = new TennisDatabase();
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        SplitPane spane = new SplitPane();
-        spane.setDividerPositions(0.1);
-        VerticalButtonBar bbar = new VerticalButtonBar();
-        bbar.setMinWidth(200);
-        bbar.setPrefWidth(200);
-
-        Pane bodyPane = new Pane();
-        bodyPane.setMinWidth(300);
-
-        Pane playerPane = new Pane();
-        playerPane.prefHeightProperty().bind(bodyPane.heightProperty());
-        playerPane.prefWidthProperty().bind(bodyPane.widthProperty());
+    private void buildPlayerPane(Pane parent) {
+        playerPane = new Pane();
+        playerPane.prefHeightProperty().bind(parent.heightProperty());
+        playerPane.prefWidthProperty().bind(parent.widthProperty());
 
         TableView playerTable = new TableView();
         playerTable.prefHeightProperty().bind(playerPane.heightProperty());
@@ -272,14 +222,16 @@ public class Assignment2 extends Application {
 
         playerTable.autosize();
         playerPane.getChildren().add(playerTable);
+    }
 
-        Pane matchPane = new Pane();
-        matchPane.prefHeightProperty().bind(bodyPane.heightProperty());
-        matchPane.prefWidthProperty().bind(bodyPane.widthProperty());
+    private void buildMatchPane(Pane parent) {
+        matchPane = new Pane();
+        matchPane.prefHeightProperty().bind(parent.heightProperty());
+        matchPane.prefWidthProperty().bind(parent.widthProperty());
 
         TableView matchTable = new TableView();
-        matchTable.prefHeightProperty().bind(playerPane.heightProperty());
-        matchTable.prefWidthProperty().bind(playerPane.widthProperty());
+        matchTable.prefHeightProperty().bind(matchPane.heightProperty());
+        matchTable.prefWidthProperty().bind(matchPane.widthProperty());
 
         TableColumn matchPlayer1 = new TableColumn("Player 1");
         TableColumn matchPlayer2 = new TableColumn("Player 2");
@@ -290,6 +242,22 @@ public class Assignment2 extends Application {
 
         matchTable.autosize();
         matchPane.getChildren().add(matchTable);
+    }
+
+    //TennisDatabase tennisDatabase = new TennisDatabase();
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        SplitPane spane = new SplitPane();
+        spane.setDividerPositions(0.1);
+        VerticalButtonBar bbar = new VerticalButtonBar();
+        bbar.setMinWidth(200);
+        bbar.setPrefWidth(200);
+
+        Pane bodyPane = new Pane();
+        bodyPane.setMinWidth(300);
+
+        buildPlayerPane(bodyPane);
+        buildMatchPane(bodyPane);
 
         bodyPane.getChildren().setAll(playerPane);
         spane.getItems().addAll(bbar, bodyPane);

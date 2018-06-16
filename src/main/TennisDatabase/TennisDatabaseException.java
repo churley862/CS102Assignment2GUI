@@ -1,6 +1,3 @@
-
-
-
 package TennisDatabase;
 
 // Custom (checked) exception for the TennisDatabase.TennisDatabase package, representing critical runtime errors (that must be handled).

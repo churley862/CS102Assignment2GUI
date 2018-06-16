@@ -1,4 +1,4 @@
-package main.java.TennisDatabase;
+package TennisDatabase;
 
 public class TennisMatchesList {
     private TennisMatchesNode head = null;

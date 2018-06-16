@@ -1,4 +1,4 @@
-package main.java.TennisDatabase;
+package TennisDatabase;
 import java.io.PrintWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
