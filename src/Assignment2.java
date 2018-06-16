@@ -1,5 +1,6 @@
 package main.java.TennisDatabase;
 
+import gui.VerticalButtonBar;
 import javafx.application.Application;
 import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
@@ -16,6 +17,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -206,112 +209,131 @@ public class Assignment2 extends Application {
         tennisDatabase.loadFromFile(text);
     }
     private void buttonImport(Stage stage) {
-        stage.setTitle("Import Tennis Players");
-        TextField text = new TextField("Browse to file");
-        Button browseButton = new Button("...");
-        browseButton.setOnAction(event -> {
-            text.setText(fileChooser(stage));
-        });
-        Button button1 = new Button("Submit");
-        Button button2 = new Button("Cancel");
-        Scene scene = new Scene(new Group());
-        HBox rootH1 = new HBox();
-        HBox rootH2 = new HBox();
-        VBox root = new VBox();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Import Tennis Players");
 
-        rootH1.getChildren().addAll(browseButton, text);
-        rootH2.getChildren().addAll(button1, button2);
-        rootH1.setAlignment(Pos.CENTER);
-        rootH2.setAlignment(Pos.CENTER);
-        root.setAlignment(Pos.CENTER);
-        root.getChildren().addAll(rootH1, rootH2);
-        button1.setOnAction(event -> {
+        File file = fileChooser.showOpenDialog(stage);
+        if (file != null) {
             try {
-                buttonSubmitImport(stage, text.getText());
+                tennisDatabase.loadFromFile(file.getName());
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-            try {
-                start(stage);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        stage.setScene(new Scene(root, 500, 575));
-        stage.show();
-
+        }
     }
 
     public void buttonExport(Stage stage) {
-        stage.setTitle("Export Tennis Players");
-        TextField text = new TextField("Browse to file");
-        Button browseButton = new Button("...");
-        browseButton.setOnAction(event -> {
-            text.setText(fileChooser(stage));
-        });
-        Button button1 = new Button("Submit");
-        Button button2 = new Button("Cancel");
-        Scene scene = new Scene(new Group());
-        HBox rootH1 = new HBox();
-        HBox rootH2 = new HBox();
-        VBox root = new VBox();
-        rootH1.getChildren().addAll(browseButton, text);
-        rootH2.getChildren().addAll(button1, button2);
-        rootH1.setAlignment(Pos.CENTER);
-        rootH2.setAlignment(Pos.CENTER);
-        root.setAlignment(Pos.CENTER);
-        root.getChildren().addAll(rootH1, rootH2);
-        button1.setOnAction(event -> {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Export Tennis Players");
+
+        File file = fileChooser.showSaveDialog(stage);
+        if (file != null) {
             try {
-                buttonSubmitExport(stage,text.getText());
+                tennisDatabase.exportToFile(file.getName());
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
-        });
-        stage.setScene(new Scene(root, 500, 575));
-        stage.show();
+        }
     }
-
-
-
-
 
     private static final Color color = Color.web("#FF00FF");
 
     //TennisDatabase tennisDatabase = new TennisDatabase();
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Scene scene = new Scene(new Group());
+        SplitPane spane = new SplitPane();
+        spane.setDividerPositions(0.1);
+        VerticalButtonBar bbar = new VerticalButtonBar();
+        bbar.setMinWidth(200);
+        bbar.setPrefWidth(200);
+
+        Pane bodyPane = new Pane();
+        bodyPane.setMinWidth(300);
+
+        Pane playerPane = new Pane();
+        playerPane.prefHeightProperty().bind(bodyPane.heightProperty());
+        playerPane.prefWidthProperty().bind(bodyPane.widthProperty());
+
+        TableView playerTable = new TableView();
+        playerTable.prefHeightProperty().bind(playerPane.heightProperty());
+        playerTable.prefWidthProperty().bind(playerPane.widthProperty());
+
+        TableColumn playerId = new TableColumn("Id");
+        TableColumn playerFirst = new TableColumn("First");
+        TableColumn playerLast = new TableColumn("Last");
+        TableColumn playerYear = new TableColumn("Year");
+        TableColumn playerCountry = new TableColumn("Country");
+        TableColumn playerWins = new TableColumn("Wins");
+        TableColumn playerLosses = new TableColumn("Losses");
+        TableColumn playerTies = new TableColumn("Ties");
+        playerTable.getColumns().addAll(playerId, playerFirst, playerLast, playerYear, playerCountry, playerWins, playerLosses, playerTies);
+
+        playerTable.autosize();
+        playerPane.getChildren().add(playerTable);
+
+        Pane matchPane = new Pane();
+        matchPane.prefHeightProperty().bind(bodyPane.heightProperty());
+        matchPane.prefWidthProperty().bind(bodyPane.widthProperty());
+
+        TableView matchTable = new TableView();
+        matchTable.prefHeightProperty().bind(playerPane.heightProperty());
+        matchTable.prefWidthProperty().bind(playerPane.widthProperty());
+
+        TableColumn matchPlayer1 = new TableColumn("Player 1");
+        TableColumn matchPlayer2 = new TableColumn("Player 2");
+        TableColumn matchDate = new TableColumn("Date");
+        TableColumn matchEvent = new TableColumn("Event");
+        TableColumn matchScores = new TableColumn("Scores");
+        matchTable.getColumns().addAll(matchPlayer1, matchPlayer2, matchDate, matchEvent, matchScores);
+
+        matchTable.autosize();
+        matchPane.getChildren().add(matchTable);
+
+        bodyPane.getChildren().setAll(playerPane);
+        spane.getItems().addAll(bbar, bodyPane);
+
         primaryStage.setTitle("Tennis Database Assignment 2");
-        primaryStage.setWidth(300);
-        primaryStage.setHeight(190);
+        primaryStage.setWidth(800);
+        primaryStage.setHeight(600);
         //label.setFont( Font.font( "Times New Roman", 22 ) );
         //label.setTextFill( color );
+        Button showPlayers = new Button("Show Players");
+        Button showMatches = new Button("Show Matches");
+
         Button button1 = new Button("Export");
         Button button2 = new Button("Import");
-        Button insert = new Button("Insert New Player or match");
-        Button printPlayers = new Button("Print all Players");
-        Button printMatches = new Button("Print all Matches");
-        button1.setOnAction(event -> {
-            buttonExport(primaryStage);
+//        Button insert = new Button("Insert New Player or match");
+//        Button printPlayers = new Button("Print all Players");
+//        Button printMatches = new Button("Print all Matches");
+        button1.setOnAction(event -> { buttonExport(primaryStage); });
+        button2.setOnAction(event -> { buttonImport(primaryStage); });
+
+        showMatches.setOnAction(event -> {
+            bodyPane.getChildren().setAll(matchPane);
         });
-        button2.setOnAction(event -> {
-            buttonImport(primaryStage);
+
+        showPlayers.setOnAction(event -> {
+            bodyPane.getChildren().setAll(playerPane);
         });
-        insert.setOnAction(event -> {
-            buttonInsertPlayer(primaryStage);
-        });
-        printPlayers.setOnAction(event -> {
-            buttonPrintPlayers(primaryStage);
-        });
-        printMatches.setOnAction(event -> {
-            buttonPrintMatches(primaryStage);
-        });
-        VBox root = new VBox();
-        root.getChildren().addAll(button1, button2,insert,printPlayers,printMatches);
-        primaryStage.setScene(new Scene(root, 500, 575));
+//        insert.setOnAction(event -> {
+//            buttonInsertPlayer(primaryStage);
+//        });
+//        printPlayers.setOnAction(event -> {
+//            buttonPrintPlayers(primaryStage);
+//        });
+//        printMatches.setOnAction(event -> {
+//            buttonPrintMatches(primaryStage);
+//        });
+
+        bbar.addButton(showPlayers);
+        bbar.addButton(showMatches);
+        bbar.addButton(button1);
+        bbar.addButton(button2);
+
+        Scene scene = new Scene(spane, 800, 600);
+        primaryStage.setScene(scene);
         primaryStage.show();
 
     }
