@@ -13,7 +13,6 @@ public class TennisDatabase{
     private TennisMatchesContainer matches = new TennisMatchesContainer();
 
     public ObservableList<TennisPlayer> getPlayers() { return players.getPlayerList(); }
-    public ObservableList<String> getPlayerIds() { return players.getPlayerIdList(); }
     public ObservableList<TennisMatch> getMatches() { return matches.getMatchList(); }
 
     public void addPlayer(TennisPlayer player) {

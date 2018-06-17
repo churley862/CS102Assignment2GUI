@@ -1,20 +1,12 @@
 package TennisDatabase;
 
-import javafx.beans.binding.ListBinding;
-import javafx.beans.property.SimpleListProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.TransformationList;
-import util.MappedList;
-
 import java.util.ArrayList;
-import java.util.function.Function;
 
 public class TennisPlayersContainer {
-    TennisPlayerNode root;
     ObservableList<TennisPlayer> playerList;
+    TennisPlayerNode root;
 
     public TennisPlayersContainer() {
         root = null;
@@ -246,12 +238,6 @@ public class TennisPlayersContainer {
             node.setPlayer(lowest.getPlayer());
         }
         return true;
-    }
-
-    public ObservableList<String> getPlayerIdList() {
-        return new MappedList<String, TennisPlayer>(getPlayerList(), player -> {
-            return player.getId();
-        });
     }
 
     public void reset() {
