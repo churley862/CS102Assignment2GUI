@@ -38,6 +38,15 @@ public class TennisPlayerNode  {
         }
     }
 
+    public void removeMatch(TennisMatch m) {
+        if (m.getWinnerId().equals(player.getId())) {
+            player.removeWin();
+        } else {
+            player.removeLoss();
+        }
+        list.removeMatch(m);
+    }
+
     public void setLeft(TennisPlayerNode n) { left = n;
     }
 
@@ -50,4 +59,5 @@ public class TennisPlayerNode  {
     public String toString(){
         return player.toString();
     }
+
 }

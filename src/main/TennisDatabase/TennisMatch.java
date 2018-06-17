@@ -50,6 +50,16 @@ public class TennisMatch {
         System.out.println("" + year + "/" + month + "/" + day + "" + player1.getId() + "-" + player2.getId() +
         " "+ event + " " + scores);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof TennisMatch) {
+           return ((TennisMatch) obj).getTournament().equals(getTournament());
+        }
+
+        return false;
+    }
+
     public String toString(){
         String match = "";
         match = "MATCH" +"/"+ player1.getId() + "/" + player2.getId() +"/"+ dateToString(year,month,day) +

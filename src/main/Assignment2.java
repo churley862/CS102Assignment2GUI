@@ -13,6 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -76,7 +77,8 @@ public class Assignment2 extends Application {
         playerPane.prefHeightProperty().bind(parent.heightProperty());
         playerPane.prefWidthProperty().bind(parent.widthProperty());
 
-        playerTable = new TableView(tennisDatabase.getPlayers());
+        ObservableList<TennisPlayer> players = tennisDatabase.getPlayers();
+        playerTable = new TableView(players);
         playerTable.prefHeightProperty().bind(playerPane.heightProperty());
         playerTable.prefWidthProperty().bind(playerPane.widthProperty());
 
@@ -97,6 +99,21 @@ public class Assignment2 extends Application {
         playerTable.getColumns().addAll(playerId, playerFirst, playerLast, playerYear, playerCountry, playerWins, playerLosses);
 
         playerTable.autosize();
+        playerTable.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.BACK_SPACE || event.getCode() == KeyCode.DELETE) {
+                int pos = playerTable.getSelectionModel().getSelectedIndex();
+
+                if (pos >= 0) {
+                    TennisPlayer player = players.get(pos);
+                    if (player.getWins() + player.getLosses() <= 0) {
+                        tennisDatabase.removePlayer(player);
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.ERROR,
+                                "You cannot delete players with matches.");
+                    }
+                }
+            }
+        });
         playerPane.getChildren().add(playerTable);
     }
 
@@ -170,7 +187,8 @@ public class Assignment2 extends Application {
         matchPane.prefHeightProperty().bind(parent.heightProperty());
         matchPane.prefWidthProperty().bind(parent.widthProperty());
 
-        TableView matchTable = new TableView(tennisDatabase.getMatches());
+        ObservableList<TennisMatch> matches = tennisDatabase.getMatches();
+        TableView matchTable = new TableView(matches);
         matchTable.prefHeightProperty().bind(matchPane.heightProperty());
         matchTable.prefWidthProperty().bind(matchPane.widthProperty());
 
@@ -187,6 +205,17 @@ public class Assignment2 extends Application {
         matchTable.getColumns().addAll(matchPlayer1, matchPlayer2, matchDate, matchEvent, matchScores);
 
         matchTable.autosize();
+
+        matchTable.setOnKeyPressed(event -> {
+           if (event.getCode() == KeyCode.BACK_SPACE || event.getCode() == KeyCode.DELETE) {
+               int pos = matchTable.getSelectionModel().getSelectedIndex();
+               
+               if (pos >= 0) {
+                  TennisMatch match = matches.get(pos);
+                  tennisDatabase.removeMatch(match);
+               }
+           }
+        });
         matchPane.getChildren().add(matchTable);
     }
 

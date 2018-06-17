@@ -81,7 +81,6 @@ public void parseLine(String s) {
         players.insertPlayer(new TennisPlayer(id, firstName, lastName, year, country));
     }
 
-
     public void insertMatch(String idPlayer1, String idPlayer2, int year, int month, int day, String tournament, String score)  {
         TennisPlayerNode player1 = players.getPlayerById(idPlayer1);
         if (player1 == null) {
@@ -100,6 +99,10 @@ public void parseLine(String s) {
         players.insertMatch(match);
     }
 
+    public void removeMatch(TennisMatch match) {
+        matches.removeMatch(match);
+        players.removeMatch(match);
+    }
 
     public void exportToFile(String fileName) throws FileNotFoundException, UnsupportedEncodingException {
         Scanner matchesScanner = new Scanner(matches.returnAllMatches());

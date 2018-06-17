@@ -83,4 +83,12 @@ public class TennisPlayer {
         this.year = player.year;
         this.country = player.country;
     }
+
+    public void removeWin() {
+        wins -= 1;
+    }
+
+    public void removeLoss() {
+        losses -= 1;
+    }
 }

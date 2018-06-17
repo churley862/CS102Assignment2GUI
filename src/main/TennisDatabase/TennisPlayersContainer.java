@@ -64,9 +64,18 @@ public class TennisPlayersContainer {
         root = node;
     }
 
+    public void removeMatch(TennisMatch match) {
+        removeMatch(root, match);
+        refresh();
+    }
 
+    void removeMatch(TennisPlayerNode node, TennisMatch match) {
+        if (node == null) return;
 
-    // TODO dummy player stuff
+        removeMatch(node.getLeft(), match);
+        node.removeMatch(match);
+        removeMatch(node.getRight(), match);
+    }
 
     public void insertMatch(TennisMatch match) {
         // check for both players in our list
@@ -88,6 +97,10 @@ public class TennisPlayersContainer {
         }
         node.insertMatch(match);
 
+        refresh();
+    }
+
+    public void refresh() {
         // hacky way to updqte the collection
         playerList.set(0, playerList.get(0));
     }
@@ -247,4 +260,5 @@ public class TennisPlayersContainer {
         playerList.clear();
         root = null;
     }
+
 }

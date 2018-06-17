@@ -18,6 +18,10 @@ public class TennisMatchesContainer {
         matches.add(insert_point,tennisMatch);
       }
 
+    public void removeMatch(TennisMatch match) {
+        matches.remove(match);
+    }
+
     public void printAllMatches() {
         for (TennisMatch match : matches) {
             match.print();
