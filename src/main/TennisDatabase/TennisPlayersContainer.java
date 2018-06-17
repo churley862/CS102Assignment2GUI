@@ -87,6 +87,9 @@ public class TennisPlayersContainer {
             node = getPlayerById(match.getPlayer2Id());
         }
         node.insertMatch(match);
+
+        // hacky way to updqte the collection
+        playerList.set(0, playerList.get(0));
     }
 
     public ArrayList<TennisPlayer> returnAllTennisPlayers(){

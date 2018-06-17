@@ -32,7 +32,6 @@ public class TennisDatabase{
     }
 
     public void loadFromFile(String fName) throws FileNotFoundException {
-
         Scanner sc = new Scanner(new File(fName));
         while (sc.hasNextLine()) {
             parseLine(sc.nextLine());
@@ -99,8 +98,6 @@ public void parseLine(String s) {
                 players.getPlayerById(idPlayer2).getPlayer(), year, month, day, tournament, score);
         matches.insertMatch(match);
         players.insertMatch(match);
-
-
     }
 
 

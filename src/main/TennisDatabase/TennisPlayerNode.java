@@ -13,12 +13,9 @@ public class TennisPlayerNode  {
         right = null;
     }
 
-
-
     public TennisPlayer getPlayer() {
         return player;
     }
-
 
     public TennisPlayerNode getLeft() {
         return left;
@@ -28,11 +25,9 @@ public class TennisPlayerNode  {
         return right;
     }
 
-
     public void printMatches(){
         list.printMatches();
     }
-
 
     public void insertMatch(TennisMatch m){
         list.insertMatch(m);

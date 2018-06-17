@@ -286,8 +286,9 @@ public class Assignment2 extends Application {
                         "Invalid date.");
                 return;
             }
-            tennisDatabase.addMatch(new TennisMatch(p1, p2, year, month, day,
-                    event.getText(), scores.getText()));
+            tennisDatabase.insertMatch(p1.getId(), p2.getId(),
+                    year, month, day,
+                    event.getText(), scores.getText());
             bodyPane.getChildren().setAll(matchPane);
         });
 
