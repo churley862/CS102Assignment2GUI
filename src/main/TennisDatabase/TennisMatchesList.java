@@ -3,7 +3,7 @@ package TennisDatabase;
 public class TennisMatchesList {
     private TennisMatchesNode head = null;
 
-    public void removeMatch(TennisMatch m) {
+    public boolean removeMatch(TennisMatch m) {
         TennisMatchesNode node = head;
 
         while (node.getMatch().compareTo(m) < 0) {
@@ -16,7 +16,9 @@ public class TennisMatchesList {
         if (node.getMatch().compareTo(m) == 0) {
            node.getPrev().setNext(node.getNext());
            node.getNext().setPrev(node.getPrev());
+           return true;
         }
+        return false;
     }
 
     public void insertMatch(TennisMatch m) {

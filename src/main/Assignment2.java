@@ -110,6 +110,7 @@ public class Assignment2 extends Application {
                     } else {
                         Alert alert = new Alert(Alert.AlertType.ERROR,
                                 "You cannot delete players with matches.");
+                        alert.showAndWait();
                     }
                 }
             }
@@ -291,6 +292,7 @@ public class Assignment2 extends Application {
             if (p1 == null || p2 == null || p1.getId().equals(p2.getId())) {
                 Alert alert = new Alert(Alert.AlertType.ERROR,
                         "You need two players to have a valid match.");
+                alert.showAndWait();
                 return;
             }
 
