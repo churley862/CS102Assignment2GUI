@@ -1,12 +1,12 @@
-package main.java.TennisDatabase;
+package TennisDatabase;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import java.util.List;
 
 
 public class TennisMatchesContainer {
-    private List<TennisMatch> matches = new ArrayList<TennisMatch>();
+    private ObservableList<TennisMatch> matches = FXCollections.observableArrayList();
 
     // Need to ask about self contained insert and sort
 
@@ -17,6 +17,10 @@ public class TennisMatchesContainer {
         }
         matches.add(insert_point,tennisMatch);
       }
+
+    public void removeMatch(TennisMatch match) {
+        matches.remove(match);
+    }
 
     public void printAllMatches() {
         for (TennisMatch match : matches) {
@@ -35,7 +39,16 @@ public class TennisMatchesContainer {
         }
         return allMatches;
     }
+
     public List<TennisMatch> returnMatches(){
         return matches;
+    }
+
+    public ObservableList<TennisMatch> getMatchList() {
+        return matches;
+    }
+
+    public void reset() {
+        matches.clear();
     }
 }

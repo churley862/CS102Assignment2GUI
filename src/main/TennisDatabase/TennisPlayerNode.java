@@ -1,4 +1,4 @@
-package main.java.TennisDatabase;
+package TennisDatabase;
 
 public class TennisPlayerNode  {
     private TennisPlayer player;
@@ -13,12 +13,9 @@ public class TennisPlayerNode  {
         right = null;
     }
 
-
-
     public TennisPlayer getPlayer() {
         return player;
     }
-
 
     public TennisPlayerNode getLeft() {
         return left;
@@ -28,11 +25,9 @@ public class TennisPlayerNode  {
         return right;
     }
 
-
     public void printMatches(){
         list.printMatches();
     }
-
 
     public void insertMatch(TennisMatch m){
         list.insertMatch(m);
@@ -41,6 +36,15 @@ public class TennisPlayerNode  {
         } else {
             player.addLoss();
         }
+    }
+
+    public void removeMatch(TennisMatch m) {
+        if (m.getWinnerId().equals(player.getId())) {
+            player.removeWin();
+        } else {
+            player.removeLoss();
+        }
+        list.removeMatch(m);
     }
 
     public void setLeft(TennisPlayerNode n) { left = n;
@@ -55,4 +59,5 @@ public class TennisPlayerNode  {
     public String toString(){
         return player.toString();
     }
+
 }

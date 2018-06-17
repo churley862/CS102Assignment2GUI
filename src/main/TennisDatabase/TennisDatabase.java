@@ -1,4 +1,6 @@
-package main.java.TennisDatabase;
+package TennisDatabase;
+import javafx.collections.ObservableList;
+
 import java.io.PrintWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,20 +11,33 @@ import java.util.Scanner;
 public class TennisDatabase{
     private TennisPlayersContainer players = new TennisPlayersContainer();
     private TennisMatchesContainer matches = new TennisMatchesContainer();
+
+    public ObservableList<TennisPlayer> getPlayers() { return players.getPlayerList(); }
+    public ObservableList<TennisMatch> getMatches() { return matches.getMatchList(); }
+
+    public void addPlayer(TennisPlayer player) {
+        players.insertPlayer(player);
+    }
+
+    public void addMatch(TennisMatch match) {
+        matches.insertMatch(match);
+    }
+
     public TennisPlayer searchTennisPlayer(String id){
         return players.getPlayerById(id).getPlayer();
     }
     public void reset(){
-        players = new TennisPlayersContainer();
-        matches = new TennisMatchesContainer();
+        players.reset();
+        matches.reset();
     }
-    public void loadFromFile(String fName) throws FileNotFoundException {
 
+    public void loadFromFile(String fName) throws FileNotFoundException {
         Scanner sc = new Scanner(new File(fName));
         while (sc.hasNextLine()) {
             parseLine(sc.nextLine());
         }
     }
+
 // TODO check for bad data lines
 public void parseLine(String s) {
     Scanner sc = new Scanner(s).useDelimiter("/");
@@ -66,7 +81,6 @@ public void parseLine(String s) {
         players.insertPlayer(new TennisPlayer(id, firstName, lastName, year, country));
     }
 
-
     public void insertMatch(String idPlayer1, String idPlayer2, int year, int month, int day, String tournament, String score)  {
         TennisPlayerNode player1 = players.getPlayerById(idPlayer1);
         if (player1 == null) {
@@ -83,10 +97,12 @@ public void parseLine(String s) {
                 players.getPlayerById(idPlayer2).getPlayer(), year, month, day, tournament, score);
         matches.insertMatch(match);
         players.insertMatch(match);
-
-
     }
 
+    public void removeMatch(TennisMatch match) {
+        matches.removeMatch(match);
+        players.removeMatch(match);
+    }
 
     public void exportToFile(String fileName) throws FileNotFoundException, UnsupportedEncodingException {
         Scanner matchesScanner = new Scanner(matches.returnAllMatches());

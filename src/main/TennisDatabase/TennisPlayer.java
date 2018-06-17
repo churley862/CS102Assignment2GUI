@@ -1,4 +1,4 @@
-package main.java.TennisDatabase;
+package TennisDatabase;
 
 public class TennisPlayer {
     public void print(){
@@ -42,6 +42,8 @@ public class TennisPlayer {
     private int wins =0;
     private int losses = 0;
 
+    public int getWins() { return wins; }
+    public int getLosses() { return losses; }
 
     public String getId() {
         return id;
@@ -80,5 +82,13 @@ public class TennisPlayer {
         this.lName = player.lName;
         this.year = player.year;
         this.country = player.country;
+    }
+
+    public void removeWin() {
+        wins -= 1;
+    }
+
+    public void removeLoss() {
+        losses -= 1;
     }
 }

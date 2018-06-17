@@ -1,7 +1,23 @@
-package main.java.TennisDatabase;
+package TennisDatabase;
 
 public class TennisMatchesList {
     private TennisMatchesNode head = null;
+
+    public void removeMatch(TennisMatch m) {
+        TennisMatchesNode node = head;
+
+        while (node.getMatch().compareTo(m) < 0) {
+           node = node.getNext();
+
+           // bail out
+           if (node == head) break;
+        }
+
+        if (node.getMatch().compareTo(m) == 0) {
+           node.getPrev().setNext(node.getNext());
+           node.getNext().setPrev(node.getPrev());
+        }
+    }
 
     public void insertMatch(TennisMatch m) {
         TennisMatchesNode node = new TennisMatchesNode(m);
@@ -42,4 +58,5 @@ public class TennisMatchesList {
             System.out.println("There are no matches for this player");
         }
     }
+
 }
