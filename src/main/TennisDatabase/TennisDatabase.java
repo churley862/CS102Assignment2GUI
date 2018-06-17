@@ -119,4 +119,8 @@ public void parseLine(String s) {
     public void removePlayer(TennisPlayer player){
         players.removeNode(player);
     }
+
+    public void deleteMatchesOfPlayer(TennisPlayer player) {
+        
+    }
 }

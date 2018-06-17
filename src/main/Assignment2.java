@@ -1,6 +1,7 @@
 
 import gui.VerticalButtonBar;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
@@ -108,9 +109,12 @@ public class Assignment2 extends Application {
                     if (player.getWins() + player.getLosses() <= 0) {
                         tennisDatabase.removePlayer(player);
                     } else {
-                        Alert alert = new Alert(Alert.AlertType.ERROR,
-                                "You cannot delete players with matches.");
-                        alert.showAndWait();
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                                "This player has matches, continuing will delete all matches containing this player and this player.");
+                        if (alert.showAndWait().get() == ButtonType.OK){
+                            tennisDatabase.deleteMatchesOfPlayer(player);
+                        }
+
                     }
                 }
             }
@@ -315,6 +319,7 @@ public class Assignment2 extends Application {
             if (!validDate) {
                 Alert alert = new Alert(Alert.AlertType.ERROR,
                         "Invalid date.");
+                alert.showAndWait();
                 return;
             }
             tennisDatabase.insertMatch(p1.getId(), p2.getId(),
@@ -380,7 +385,13 @@ public class Assignment2 extends Application {
         Button importButton = new Button("Import");
         importButton.setOnAction(event -> { buttonImport(primaryStage); });
 
-        bbar.addAll(showPlayers, showMatches, addPlayer, addMatch, exportButton, importButton);
+        Button quitButton = new Button("Quit Tennis Database");
+        quitButton.setOnAction(event -> {
+                    Platform.exit();
+                    System.exit(0);
+                    });
+
+        bbar.addAll(showPlayers, showMatches, addPlayer, addMatch, exportButton, importButton,quitButton);
 
         Scene scene = new Scene(spane, 800, 600);
         primaryStage.setScene(scene);
