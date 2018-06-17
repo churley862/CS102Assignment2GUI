@@ -1,4 +1,6 @@
 package TennisDatabase;
+import javafx.collections.ObservableList;
+
 import java.io.PrintWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,13 +11,27 @@ import java.util.Scanner;
 public class TennisDatabase{
     private TennisPlayersContainer players = new TennisPlayersContainer();
     private TennisMatchesContainer matches = new TennisMatchesContainer();
+
+    public ObservableList<TennisPlayer> getPlayers() { return players.getPlayerList(); }
+    public ObservableList<String> getPlayerIds() { return players.getPlayerIdList(); }
+    public ObservableList<TennisMatch> getMatches() { return matches.getMatchList(); }
+
+    public void addPlayer(TennisPlayer player) {
+        players.insertPlayer(player);
+    }
+
+    public void addMatch(TennisMatch match) {
+        matches.insertMatch(match);
+    }
+
     public TennisPlayer searchTennisPlayer(String id){
         return players.getPlayerById(id).getPlayer();
     }
     public void reset(){
-        players = new TennisPlayersContainer();
-        matches = new TennisMatchesContainer();
+        players.reset();
+        matches.reset();
     }
+
     public void loadFromFile(String fName) throws FileNotFoundException {
 
         Scanner sc = new Scanner(new File(fName));
@@ -23,6 +39,7 @@ public class TennisDatabase{
             parseLine(sc.nextLine());
         }
     }
+
 // TODO check for bad data lines
 public void parseLine(String s) {
     Scanner sc = new Scanner(s).useDelimiter("/");

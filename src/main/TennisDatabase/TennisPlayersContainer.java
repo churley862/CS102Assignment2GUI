@@ -1,15 +1,40 @@
 package TennisDatabase;
 
+import javafx.beans.binding.ListBinding;
+import javafx.beans.property.SimpleListProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.TransformationList;
+import util.MappedList;
+
 import java.util.ArrayList;
+import java.util.function.Function;
 
 public class TennisPlayersContainer {
     TennisPlayerNode root;
+    ObservableList<TennisPlayer> playerList;
 
     public TennisPlayersContainer() {
         root = null;
+        playerList = FXCollections.observableArrayList();
+    }
+
+    public ObservableList<TennisPlayer> getPlayerList() {
+        return playerList;
     }
 
     public void insertPlayer(TennisPlayer player) {
+        boolean newPlayer = true;
+        for (TennisPlayer p : playerList) {
+            if (p.compareTo(player) == 0) {
+//                p.updatePlayer(player);
+                newPlayer = false;
+            }
+        }
+        if (newPlayer) playerList.add(player);
+
         if (root == null) {
             insertFirstNode(player);
         }
@@ -27,7 +52,7 @@ public class TennisPlayersContainer {
 
     private TennisPlayerNode findInsertNode(TennisPlayerNode node, TennisPlayer player) {
         if(node.getPlayer().compareTo(player) == 0) {
-           return node;
+            return node;
         }else if(node.getPlayer().compareTo(player) < 0){
             if (node.getLeft() == null) return node;
             return findInsertNode(node.getLeft(), player);
@@ -52,7 +77,7 @@ public class TennisPlayersContainer {
     // TODO dummy player stuff
 
     public void insertMatch(TennisMatch match) {
-       // check for both players in our list
+        // check for both players in our list
         // if the player exists then
 
         TennisPlayerNode node = getPlayerById(match.getPlayer1Id());
@@ -71,8 +96,8 @@ public class TennisPlayersContainer {
         }
         node.insertMatch(match);
     }
-    public ArrayList<TennisPlayer> returnAllTennisPlayers(){
 
+    public ArrayList<TennisPlayer> returnAllTennisPlayers(){
         return returnAllTennisPlayers(root);
     }
 
@@ -97,16 +122,17 @@ public class TennisPlayersContainer {
         node.getPlayer().print();
         printAllPlayers(node.getRight());
     }
+
     public String toString(){
         return toString(root);
     }
 
     private String toString(TennisPlayerNode node) {
         if (node == null) { return ""; }
-            String allPlayers = toString(node.getLeft());
-            allPlayers += node.getPlayer() + "\n";
-            allPlayers += toString(node.getRight());
-            return allPlayers;
+        String allPlayers = toString(node.getLeft());
+        allPlayers += node.getPlayer() + "\n";
+        allPlayers += toString(node.getRight());
+        return allPlayers;
     }
 
     public void printMatchesOfPlayer(String playerId) {
@@ -184,40 +210,52 @@ public class TennisPlayersContainer {
     }
 
     public boolean removeNode(TennisPlayer p) {
-            TennisPlayerNode[] removePoint = findNode(p);
-            TennisPlayerNode parent = removePoint[0];
-            TennisPlayerNode node = removePoint[1];
+        playerList.remove(p);
 
-            if (node == null)
-                return false;
+        TennisPlayerNode[] removePoint = findNode(p);
+        TennisPlayerNode parent = removePoint[0];
+        TennisPlayerNode node = removePoint[1];
 
-            if (node.getLeft() == null && node.getRight() == null) {
-                if (parent == null) {
-                    root = null;
-                } else {
-                    setParentPointer(parent, node, null);
-                }
-                return true;
-            }
+        if (node == null)
+            return false;
 
-            if (node.getLeft() == null) {
-                if (parent == null) {
-                    root = node.getRight();
-                } else {
-                    setParentPointer(parent, node, node.getRight());
-                }
-            } else if (node.getRight() == null) {
-                if (parent == null) {
-                    root = node.getLeft();
-                } else {
-                    setParentPointer(parent, node, node.getLeft());
-                }
+        if (node.getLeft() == null && node.getRight() == null) {
+            if (parent == null) {
+                root = null;
             } else {
-                TennisPlayerNode lowest = findLowestNode(node.getLeft());
-                removeNode(lowest.getPlayer());
-                node.setPlayer(lowest.getPlayer());
+                setParentPointer(parent, node, null);
             }
             return true;
         }
 
+        if (node.getLeft() == null) {
+            if (parent == null) {
+                root = node.getRight();
+            } else {
+                setParentPointer(parent, node, node.getRight());
+            }
+        } else if (node.getRight() == null) {
+            if (parent == null) {
+                root = node.getLeft();
+            } else {
+                setParentPointer(parent, node, node.getLeft());
+            }
+        } else {
+            TennisPlayerNode lowest = findLowestNode(node.getLeft());
+            removeNode(lowest.getPlayer());
+            node.setPlayer(lowest.getPlayer());
+        }
+        return true;
+    }
+
+    public ObservableList<String> getPlayerIdList() {
+        return new MappedList<String, TennisPlayer>(getPlayerList(), player -> {
+            return player.getId();
+        });
+    }
+
+    public void reset() {
+        playerList.clear();
+        root = null;
+    }
 }

@@ -29,6 +29,7 @@ public class TennisMatch {
         return day;
     }
 
+    public String getDate() { return String.format("%d/%d/%d", month, day, year); }
 
     public String getTournament() {
         return event;
@@ -80,7 +81,7 @@ public class TennisMatch {
     private String event;
     private String scores;
 
-    TennisMatch(TennisPlayer player1, TennisPlayer player2, int year, int month, int day, String event, String scores) {
+    public TennisMatch(TennisPlayer player1, TennisPlayer player2, int year, int month, int day, String event, String scores) {
         this.player1 = player1;
         this.player2 = player2;
         this.day = day;

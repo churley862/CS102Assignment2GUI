@@ -14,4 +14,9 @@ public class VerticalButtonBar extends VBox {
         getChildren().add(button);
     }
 
+    public void addAll(Button... buttons) {
+        for(Button b : buttons) {
+            addButton(b);
+        }
+    }
 }

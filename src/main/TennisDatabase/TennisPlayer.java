@@ -42,6 +42,8 @@ public class TennisPlayer {
     private int wins =0;
     private int losses = 0;
 
+    public int getWins() { return wins; }
+    public int getLosses() { return losses; }
 
     public String getId() {
         return id;

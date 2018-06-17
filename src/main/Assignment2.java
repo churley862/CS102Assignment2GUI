@@ -1,12 +1,19 @@
 
 import gui.VerticalButtonBar;
 import javafx.application.Application;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -17,156 +24,15 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Scanner;
 
 import TennisDatabase.*;
+import javafx.util.StringConverter;
 
 public class Assignment2 extends Application {
     private TableView table = new TableView();
     private TennisDatabase tennisDatabase = new TennisDatabase();
-
-    private void buttonPrintMatches(Stage stage) {
-        Scene scene = new Scene(new Group());
-        stage.setTitle("Matches list");
-        stage.setWidth(300);
-        stage.setHeight(500);
-
-        final Label label = new Label("Matches List");
-        label.setFont(new Font("Arial", 20));
-
-        table.setEditable(true);
-
-        ArrayList<TennisMatch> matcheslist = tennisDatabase.returnAllMatches();
-        TableView<Integer> table = new TableView<>();
-        for (int i =0; i < matcheslist.size(); i++){
-            table.getItems().add(i);
-        }
-        TableColumn<Integer,String > player1IDCol = new TableColumn<>("Player 1 ID");
-        player1IDCol.setCellValueFactory(cellData -> {
-            Integer rowIndex = cellData.getValue();
-            return new ReadOnlyStringWrapper(matcheslist.get(rowIndex).getPlayer1Id());
-        });
-        TableColumn<Integer,String > player2IDCol = new TableColumn<>("Player 2 ID");
-        player2IDCol.setCellValueFactory(cellData -> {
-            Integer rowIndex = cellData.getValue();
-            return new ReadOnlyStringWrapper(matcheslist.get(rowIndex).getPlayer2Id());
-        });
-        TableColumn<Integer,String > scoreCol = new TableColumn<>("Score");
-        scoreCol.setCellValueFactory(cellData -> {
-            Integer rowIndex = cellData.getValue();
-            return new ReadOnlyStringWrapper(matcheslist.get(rowIndex).getScore());
-        });
-        TableColumn<Integer,String > dateCol = new TableColumn<>("Date");
-        dateCol.setCellValueFactory(cellData -> {
-            Integer rowIndex = cellData.getValue();
-            return new ReadOnlyStringWrapper(matcheslist.get(rowIndex).dateToString(matcheslist.get(rowIndex).getDateYear()
-                    ,matcheslist.get(rowIndex).getDateMonth(),matcheslist.get(rowIndex).getDateDay()));
-        });
-        TableColumn<Integer,String> tounCol = new TableColumn<>("Location");
-        tounCol.setCellValueFactory(cellData -> {
-            Integer rowIndex = cellData.getValue();
-            return new ReadOnlyStringWrapper( (matcheslist.get(rowIndex).getTournament()));
-        });
-
-        table.getColumns().addAll(player1IDCol,player2IDCol, dateCol, scoreCol,tounCol);
-
-        final VBox vbox = new VBox();
-        vbox.setSpacing(5);
-        vbox.setPadding(new Insets(10, 0, 0, 10));
-        vbox.getChildren().addAll(label, table);
-
-        ((Group) scene.getRoot()).getChildren().addAll(vbox);
-
-        stage.setScene(scene);
-        stage.show();
-
-    }
-
-    private void buttonSubmitInsertPlayer(Stage stage, String playerText) {
-        tennisDatabase.parseLine(playerText);
-    }
-    private void buttonPrintPlayers(Stage stage) {
-        Scene scene = new Scene(new Group());
-        stage.setTitle("Players list");
-        stage.setWidth(300);
-        stage.setHeight(500);
-
-        final Label label = new Label("Players List");
-        label.setFont(new Font("Arial", 20));
-
-        table.setEditable(true);
-
-        ArrayList<TennisPlayer> playerlist = tennisDatabase.returnAllPlayers();
-        TableView<Integer> table = new TableView<>();
-        for (int i =0; i < playerlist.size(); i++){
-            table.getItems().add(i);
-        }
-        TableColumn<Integer,String > playerIDCol = new TableColumn<>("Player ID");
-        playerIDCol.setCellValueFactory(cellData -> {
-            Integer rowIndex = cellData.getValue();
-            return new ReadOnlyStringWrapper(playerlist.get(rowIndex).getId());
-        });
-        TableColumn<Integer,String > locationCol = new TableColumn<>("Birth Location");
-        locationCol.setCellValueFactory(cellData -> {
-            Integer rowIndex = cellData.getValue();
-            return new ReadOnlyStringWrapper(playerlist.get(rowIndex).getCountry());
-        });
-        TableColumn<Integer,String > firstNameCol = new TableColumn<>("First name");
-        firstNameCol.setCellValueFactory(cellData -> {
-            Integer rowIndex = cellData.getValue();
-            return new ReadOnlyStringWrapper(playerlist.get(rowIndex).getFirstName());
-        });
-        TableColumn<Integer,String > lastNameCol = new TableColumn<>("Last name");
-        lastNameCol.setCellValueFactory(cellData -> {
-            Integer rowIndex = cellData.getValue();
-            return new ReadOnlyStringWrapper(playerlist.get(rowIndex).getLastName());
-        });
-        TableColumn<Integer,String> yearCol = new TableColumn<>("Birth year");
-        playerIDCol.setCellValueFactory(cellData -> {
-            Integer rowIndex = cellData.getValue();
-            return new ReadOnlyStringWrapper( (playerlist.get(rowIndex).getId()));
-        });
-
-        table.getColumns().addAll(playerIDCol,firstNameCol, lastNameCol, yearCol,locationCol);
-
-        final VBox vbox = new VBox();
-        vbox.setSpacing(5);
-        vbox.setPadding(new Insets(10, 0, 0, 10));
-        vbox.getChildren().addAll(label, table);
-
-        ((Group) scene.getRoot()).getChildren().addAll(vbox);
-
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    private void buttonInsertPlayer(Stage stage) {
-        stage.setTitle("Insert a Tennis Player");
-        TextField text = new TextField("insert a player in the correct format");
-        Button button1 = new Button("Submit");
-        Button button2 = new Button("Cancel");
-        Scene scene = new Scene(new Group());
-        HBox rootH1 = new HBox();
-        HBox rootH2 = new HBox();
-        VBox root = new VBox();
-
-        rootH1.getChildren().addAll(text);
-        rootH2.getChildren().addAll(button1, button2);
-        rootH1.setAlignment(Pos.CENTER);
-        rootH2.setAlignment(Pos.CENTER);
-        root.setAlignment(Pos.CENTER);
-        root.getChildren().addAll(rootH1, rootH2);
-        button1.setOnAction(event -> {
-            buttonSubmitInsertPlayer(stage, text.getText());
-            try {
-                start(stage);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-    });
-        stage.setScene(new Scene(root, 500, 575));
-        stage.show();
-    }
 
     private void buttonImport(Stage stage) {
         FileChooser fileChooser = new FileChooser();
@@ -198,30 +64,105 @@ public class Assignment2 extends Application {
         }
     }
 
+    private Pane bodyPane;
     private Pane playerPane;
+    private GridPane addPlayerPane;
+    private GridPane addMatchPane;
     private Pane matchPane;
+    private TableView playerTable;
 
     private void buildPlayerPane(Pane parent) {
         playerPane = new Pane();
         playerPane.prefHeightProperty().bind(parent.heightProperty());
         playerPane.prefWidthProperty().bind(parent.widthProperty());
 
-        TableView playerTable = new TableView();
+        playerTable = new TableView(tennisDatabase.getPlayers());
         playerTable.prefHeightProperty().bind(playerPane.heightProperty());
         playerTable.prefWidthProperty().bind(playerPane.widthProperty());
 
-        TableColumn playerId = new TableColumn("Id");
-        TableColumn playerFirst = new TableColumn("First");
-        TableColumn playerLast = new TableColumn("Last");
-        TableColumn playerYear = new TableColumn("Year");
-        TableColumn playerCountry = new TableColumn("Country");
-        TableColumn playerWins = new TableColumn("Wins");
-        TableColumn playerLosses = new TableColumn("Losses");
-        TableColumn playerTies = new TableColumn("Ties");
-        playerTable.getColumns().addAll(playerId, playerFirst, playerLast, playerYear, playerCountry, playerWins, playerLosses, playerTies);
+        TableColumn<TennisPlayer,String> playerId = new TableColumn("Id");
+        playerId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        TableColumn<TennisPlayer,String> playerFirst = new TableColumn("First");
+        playerFirst.setCellValueFactory(new PropertyValueFactory<>("FirstName"));
+        TableColumn<TennisPlayer,String> playerLast = new TableColumn("Last");
+        playerLast.setCellValueFactory(new PropertyValueFactory<>("LastName"));
+        TableColumn<TennisPlayer,Integer> playerYear = new TableColumn("Year");
+        playerYear.setCellValueFactory(new PropertyValueFactory<>("BirthYear"));
+        TableColumn<TennisPlayer,String> playerCountry = new TableColumn("Country");
+        playerCountry.setCellValueFactory(new PropertyValueFactory<>("country"));
+        TableColumn<TennisPlayer,Integer> playerWins = new TableColumn("Wins");
+        playerWins.setCellValueFactory(new PropertyValueFactory<>("wins"));
+        TableColumn<TennisPlayer,Integer> playerLosses = new TableColumn("Losses");
+        playerLosses.setCellValueFactory(new PropertyValueFactory<>("losses"));
+        playerTable.getColumns().addAll(playerId, playerFirst, playerLast, playerYear, playerCountry, playerWins, playerLosses);
 
         playerTable.autosize();
         playerPane.getChildren().add(playerTable);
+    }
+
+    private void buildAddPlayerPane(Pane parent) {
+        addPlayerPane = new GridPane();
+        addPlayerPane.prefHeightProperty().bind(parent.heightProperty());
+        addPlayerPane.prefWidthProperty().bind(parent.widthProperty());
+
+        addPlayerPane.setAlignment(Pos.TOP_CENTER);
+        addPlayerPane.setHgap(5);
+        addPlayerPane.setVgap(5);
+        addPlayerPane.setPadding(new Insets(50,25,25,25)); // set top, right, bottom, left
+
+        int row = 1;
+        Label l0 = new Label("Id: ");
+        GridPane.setHalignment(l0, HPos.RIGHT);
+        addPlayerPane.add(l0, 0, row);
+        TextField id = new TextField("");
+        id.setPrefColumnCount(14);
+        addPlayerPane.add(id, 1, row++);
+
+        Label l1 = new Label("First Name: ");
+        GridPane.setHalignment(l1, HPos.RIGHT);
+        addPlayerPane.add(l1, 0, row);
+        TextField firstName = new TextField("");
+        firstName.setPrefColumnCount(14);
+        addPlayerPane.add(firstName, 1, row++);
+
+        Label l2 = new Label("Last Name: ");
+        GridPane.setHalignment(l2, HPos.RIGHT);
+        addPlayerPane.add(l2, 0, row);
+        TextField lastName = new TextField("");
+        lastName.setPrefColumnCount(14);
+        addPlayerPane.add(lastName, 1, row++);
+
+        Label l3 = new Label("Country: ");
+        GridPane.setHalignment(l3, HPos.RIGHT);
+        addPlayerPane.add(l3, 0, row);
+
+        TextField country = new TextField("");
+        country.setPrefColumnCount(14);
+        addPlayerPane.add(country, 1, row++);
+
+        Label l4 = new Label("Year: ");
+        GridPane.setHalignment(l4, HPos.RIGHT);
+        addPlayerPane.add(l4, 0, row);
+
+        TextField year = new TextField("");
+        year.setPrefColumnCount(14);
+        addPlayerPane.add(year, 1, row++);
+
+        Button addButton = new Button("Add");
+        addPlayerPane.add(addButton, 0, row + 5);
+        addButton.setOnAction(e -> {
+            int yearNum = Integer.parseInt(year.getText());
+            tennisDatabase.addPlayer(new TennisPlayer(id.getText(),
+                    firstName.getText(), lastName.getText(),
+                    yearNum, country.getText()));
+            bodyPane.getChildren().setAll(playerPane);
+        });
+
+        Button cancelButton = new Button("Cancel");
+        addPlayerPane.add(cancelButton, 1, row + 5);
+        cancelButton.setOnAction(e -> {
+            bodyPane.getChildren().setAll(playerPane);
+        });
     }
 
     private void buildMatchPane(Pane parent) {
@@ -229,19 +170,132 @@ public class Assignment2 extends Application {
         matchPane.prefHeightProperty().bind(parent.heightProperty());
         matchPane.prefWidthProperty().bind(parent.widthProperty());
 
-        TableView matchTable = new TableView();
+        TableView matchTable = new TableView(tennisDatabase.getMatches());
         matchTable.prefHeightProperty().bind(matchPane.heightProperty());
         matchTable.prefWidthProperty().bind(matchPane.widthProperty());
 
         TableColumn matchPlayer1 = new TableColumn("Player 1");
+        matchPlayer1.setCellValueFactory(new PropertyValueFactory<>("Player1Id"));
         TableColumn matchPlayer2 = new TableColumn("Player 2");
+        matchPlayer2.setCellValueFactory(new PropertyValueFactory<>("Player2Id"));
         TableColumn matchDate = new TableColumn("Date");
+        matchDate.setCellValueFactory(new PropertyValueFactory<>("date"));
         TableColumn matchEvent = new TableColumn("Event");
+        matchEvent.setCellValueFactory(new PropertyValueFactory<>("tournament"));
         TableColumn matchScores = new TableColumn("Scores");
+        matchScores.setCellValueFactory(new PropertyValueFactory<>("score"));
         matchTable.getColumns().addAll(matchPlayer1, matchPlayer2, matchDate, matchEvent, matchScores);
 
         matchTable.autosize();
         matchPane.getChildren().add(matchTable);
+    }
+
+    private void buildAddMatchPane(Pane parent) {
+        addMatchPane = new GridPane();
+        addMatchPane.prefHeightProperty().bind(parent.heightProperty());
+        addMatchPane.prefWidthProperty().bind(parent.widthProperty());
+
+        addMatchPane.setAlignment(Pos.TOP_CENTER);
+        addMatchPane.setHgap(5);
+        addMatchPane.setVgap(5);
+        addMatchPane.setPadding(new Insets(50,25,25,25)); // set top, right, bottom, left
+
+        int row = 1;
+        Label l0 = new Label("Player 1: ");
+        GridPane.setHalignment(l0, HPos.RIGHT);
+        addMatchPane.add(l0, 0, row);
+
+        ObservableList<TennisPlayer> playerIds = tennisDatabase.getPlayers();
+        StringConverter<TennisPlayer> converter = new StringConverter<TennisPlayer>() {
+            @Override
+            public String toString(TennisPlayer player) {
+                if (player == null) return "";
+                return player.getId();
+            }
+
+            @Override
+            public TennisPlayer fromString(String string) {
+                return null;
+            }
+        };
+        ComboBox player1 = new ComboBox(playerIds);
+        player1.setConverter(converter);
+        addMatchPane.add(player1, 1, row++);
+
+        Label l1 = new Label("Player 2: ");
+        GridPane.setHalignment(l1, HPos.RIGHT);
+        addMatchPane.add(l1, 0, row);
+
+        ComboBox player2 = new ComboBox(playerIds);
+        player2.setConverter(converter);
+        addMatchPane.add(player2, 1, row++);
+
+        Label l2 = new Label("Event");
+        GridPane.setHalignment(l2, HPos.RIGHT);
+        addMatchPane.add(l2, 0, row);
+
+        TextField event = new TextField("");
+        event.setPrefColumnCount(14);
+        addMatchPane.add(event, 1, row++);
+
+        Label l3 = new Label("Date: ");
+        GridPane.setHalignment(l3, HPos.RIGHT);
+        addMatchPane.add(l3, 0, row);
+
+        TextField date = new TextField("");
+        date.setPrefColumnCount(14);
+        addMatchPane.add(date, 1, row++);
+
+        Label l4 = new Label("Scores: ");
+        GridPane.setHalignment(l4, HPos.RIGHT);
+        addMatchPane.add(l4, 0, row);
+
+        TextField scores = new TextField("");
+        scores.setPrefColumnCount(14);
+        addMatchPane.add(scores, 1, row++);
+
+        Button addButton = new Button("Add");
+        addMatchPane.add(addButton, 0, row + 5);
+        addButton.setOnAction(e -> {
+            TennisPlayer p1 = (TennisPlayer) player1.getValue();
+            TennisPlayer p2 = (TennisPlayer) player2.getValue();
+            if (p1 == null || p2 == null || p1.getId().equals(p2.getId())) {
+                Alert alert = new Alert(Alert.AlertType.ERROR,
+                        "You need two players to have a valid match.");
+                return;
+            }
+
+            boolean validDate = false;
+            int year = 0;
+            int month = 0;
+            int day = 0;
+            Scanner sc = new Scanner(date.getText());
+            sc.useDelimiter("/");
+            if (sc.hasNextInt()) {
+                month = sc.nextInt();
+                if (sc.hasNextInt()) {
+                    day = sc.nextInt();
+                    if (sc.hasNextInt()) {
+                        year = sc.nextInt();
+                        validDate = true;
+                    }
+                }
+            }
+            if (!validDate) {
+                Alert alert = new Alert(Alert.AlertType.ERROR,
+                        "Invalid date.");
+                return;
+            }
+            tennisDatabase.addMatch(new TennisMatch(p1, p2, year, month, day,
+                    event.getText(), scores.getText()));
+            bodyPane.getChildren().setAll(matchPane);
+        });
+
+        Button cancelButton = new Button("Cancel");
+        addMatchPane.add(cancelButton, 1, row + 5);
+        cancelButton.setOnAction(e -> {
+            bodyPane.getChildren().setAll(matchPane);
+        });
     }
 
     //TennisDatabase tennisDatabase = new TennisDatabase();
@@ -253,11 +307,13 @@ public class Assignment2 extends Application {
         bbar.setMinWidth(200);
         bbar.setPrefWidth(200);
 
-        Pane bodyPane = new Pane();
+        bodyPane = new Pane();
         bodyPane.setMinWidth(300);
 
         buildPlayerPane(bodyPane);
         buildMatchPane(bodyPane);
+        buildAddPlayerPane(bodyPane);
+        buildAddMatchPane(bodyPane);
 
         bodyPane.getChildren().setAll(playerPane);
         spane.getItems().addAll(bbar, bodyPane);
@@ -265,49 +321,39 @@ public class Assignment2 extends Application {
         primaryStage.setTitle("Tennis Database Assignment 2");
         primaryStage.setWidth(800);
         primaryStage.setHeight(600);
-        //label.setFont( Font.font( "Times New Roman", 22 ) );
-        //label.setTextFill( color );
+
         Button showPlayers = new Button("Show Players");
+        showPlayers.setOnAction(event -> {
+            bodyPane.getChildren().setAll(playerPane);
+        });
+
         Button showMatches = new Button("Show Matches");
-
-        Button button1 = new Button("Export");
-        Button button2 = new Button("Import");
-//        Button insert = new Button("Insert New Player or match");
-//        Button printPlayers = new Button("Print all Players");
-//        Button printMatches = new Button("Print all Matches");
-        button1.setOnAction(event -> { buttonExport(primaryStage); });
-        button2.setOnAction(event -> { buttonImport(primaryStage); });
-
         showMatches.setOnAction(event -> {
             bodyPane.getChildren().setAll(matchPane);
         });
 
-        showPlayers.setOnAction(event -> {
-            bodyPane.getChildren().setAll(playerPane);
+        Button addPlayer = new Button("Add Player");
+        addPlayer.setOnAction(event -> {
+            bodyPane.getChildren().setAll(addPlayerPane);
         });
-//        insert.setOnAction(event -> {
-//            buttonInsertPlayer(primaryStage);
-//        });
-//        printPlayers.setOnAction(event -> {
-//            buttonPrintPlayers(primaryStage);
-//        });
-//        printMatches.setOnAction(event -> {
-//            buttonPrintMatches(primaryStage);
-//        });
 
-        bbar.addButton(showPlayers);
-        bbar.addButton(showMatches);
-        bbar.addButton(button1);
-        bbar.addButton(button2);
+        Button addMatch = new Button("Add Match");
+        addMatch.setOnAction(event -> {
+            bodyPane.getChildren().setAll(addMatchPane);
+        });
+
+        Button exportButton = new Button("Export");
+        exportButton.setOnAction(event -> { buttonExport(primaryStage); });
+
+        Button importButton = new Button("Import");
+        importButton.setOnAction(event -> { buttonImport(primaryStage); });
+
+        bbar.addAll(showPlayers, showMatches, addPlayer, addMatch, exportButton, importButton);
 
         Scene scene = new Scene(spane, 800, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
-
     }
-
-
-
 
     public static void main(String[] args) {
         launch(args);
