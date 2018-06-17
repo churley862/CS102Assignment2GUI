@@ -37,6 +37,9 @@ public class TennisPlayerNode  {
             player.addLoss();
         }
     }
+    public void removeAllMatches(){
+
+    }
 
     public void removeMatch(TennisMatch m) {
         if (list.removeMatch(m)) {

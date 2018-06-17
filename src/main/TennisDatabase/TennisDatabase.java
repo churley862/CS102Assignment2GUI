@@ -121,6 +121,8 @@ public void parseLine(String s) {
     }
 
     public void deleteMatchesOfPlayer(TennisPlayer player) {
-        
+        for (TennisMatch match : matches.returnAllPlayerMatches(player)) {
+            removeMatch(match);
+        }
     }
 }

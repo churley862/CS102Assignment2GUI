@@ -113,6 +113,7 @@ public class Assignment2 extends Application {
                                 "This player has matches, continuing will delete all matches containing this player and this player.");
                         if (alert.showAndWait().get() == ButtonType.OK){
                             tennisDatabase.deleteMatchesOfPlayer(player);
+                            tennisDatabase.removePlayer(player);
                         }
 
                     }
@@ -272,7 +273,7 @@ public class Assignment2 extends Application {
         event.setPrefColumnCount(14);
         addMatchPane.add(event, 1, row++);
 
-        Label l3 = new Label("Date: ");
+        Label l3 = new Label("Date (MM/DD/YYYY): ");
         GridPane.setHalignment(l3, HPos.RIGHT);
         addMatchPane.add(l3, 0, row);
 
@@ -385,13 +386,16 @@ public class Assignment2 extends Application {
         Button importButton = new Button("Import");
         importButton.setOnAction(event -> { buttonImport(primaryStage); });
 
+        Button resetButton = new Button("Reset Database");
+        resetButton.setOnAction(event -> {tennisDatabase.reset();});
+
         Button quitButton = new Button("Quit Tennis Database");
         quitButton.setOnAction(event -> {
                     Platform.exit();
                     System.exit(0);
                     });
 
-        bbar.addAll(showPlayers, showMatches, addPlayer, addMatch, exportButton, importButton,quitButton);
+        bbar.addAll(showPlayers, showMatches, addPlayer, addMatch, exportButton, importButton,resetButton,quitButton);
 
         Scene scene = new Scene(spane, 800, 600);
         primaryStage.setScene(scene);

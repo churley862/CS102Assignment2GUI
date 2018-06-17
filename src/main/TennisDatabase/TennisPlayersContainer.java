@@ -21,7 +21,6 @@ public class TennisPlayersContainer {
         boolean newPlayer = true;
         for (TennisPlayer p : playerList) {
             if (p.compareTo(player) == 0) {
-//                p.updatePlayer(player);
                 newPlayer = false;
             }
         }

@@ -2,6 +2,8 @@ package TennisDatabase;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -38,6 +40,15 @@ public class TennisMatchesContainer {
             }
         }
         return allMatches;
+    }
+    public List<TennisMatch> returnAllPlayerMatches(TennisPlayer player){
+        List<TennisMatch> playerMatches = new ArrayList<>();
+        for (TennisMatch match : matches) {
+            if (match.getPlayer2Id() == player.getId() || match.getPlayer1Id() == player.getId()){
+                playerMatches.add(match);
+            }
+        }
+        return playerMatches;
     }
 
     public List<TennisMatch> returnMatches(){
