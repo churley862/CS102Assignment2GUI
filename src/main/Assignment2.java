@@ -164,7 +164,7 @@ public class Assignment2 extends Application {
         country.setPrefColumnCount(14);
         addPlayerPane.add(country, 1, row++);
 
-        Label l4 = new Label("Year: ");
+        Label l4 = new Label("Birth Year: ");
         GridPane.setHalignment(l4, HPos.RIGHT);
         addPlayerPane.add(l4, 0, row);
 
@@ -175,7 +175,58 @@ public class Assignment2 extends Application {
         Button addButton = new Button("Add");
         addPlayerPane.add(addButton, 0, row + 5);
         addButton.setOnAction(e -> {
-            int yearNum = Integer.parseInt(year.getText());
+
+            if (id.getText().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR,
+                        "You must provide an player id.");
+                alert.showAndWait();
+                return;
+            }
+
+            if (firstName.getText().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR,
+                        "You must provide a first name.");
+                alert.showAndWait();
+                return;
+            }
+
+            if (lastName.getText().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR,
+                        "You must provide a last name.");
+                alert.showAndWait();
+                return;
+            }
+
+            if (year.getText().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR,
+                        "You must provide an player birth year.");
+                alert.showAndWait();
+                return;
+            }
+
+            if (country.getText().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR,
+                        "You must provide an player country.");
+                alert.showAndWait();
+                return;
+            }
+
+            int yearNum = -1;
+            try {
+                yearNum = Integer.parseInt(year.getText());
+            } catch (NumberFormatException err) {
+                Alert alert = new Alert(Alert.AlertType.ERROR,
+                        "Birth year must be a valid integer.");
+                alert.showAndWait();
+                return;
+            }
+
+            if (tennisDatabase.hasPlayer(id.getText())) {
+                Alert alert = new Alert(Alert.AlertType.ERROR,
+                        "Player id must be unique.");
+                alert.showAndWait();
+                return;
+            }
             tennisDatabase.addPlayer(new TennisPlayer(id.getText(),
                     firstName.getText(), lastName.getText(),
                     yearNum, country.getText()));
@@ -200,9 +251,9 @@ public class Assignment2 extends Application {
         matchTable.prefWidthProperty().bind(matchPane.widthProperty());
 
         TableColumn matchPlayer1 = new TableColumn("Player 1");
-        matchPlayer1.setCellValueFactory(new PropertyValueFactory<>("Player1Id"));
+        matchPlayer1.setCellValueFactory(new PropertyValueFactory<>("Player1Name"));
         TableColumn matchPlayer2 = new TableColumn("Player 2");
-        matchPlayer2.setCellValueFactory(new PropertyValueFactory<>("Player2Id"));
+        matchPlayer2.setCellValueFactory(new PropertyValueFactory<>("Player2Name"));
         TableColumn matchDate = new TableColumn("Date");
         matchDate.setCellValueFactory(new PropertyValueFactory<>("date"));
         TableColumn matchEvent = new TableColumn("Event");
@@ -323,7 +374,7 @@ public class Assignment2 extends Application {
                     }
                 }
             }
-            
+
             if (!validDate) {
                 Alert alert = new Alert(Alert.AlertType.ERROR,
                         "Invalid date.");

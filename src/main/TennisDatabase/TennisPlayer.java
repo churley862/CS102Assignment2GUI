@@ -91,4 +91,8 @@ public class TennisPlayer {
     public void removeLoss() {
         losses -= 1;
     }
+
+    public String getName() {
+        return fName + " " + lName;
+    }
 }

@@ -126,7 +126,11 @@ public void parseLine(String s) {
         }
     }
 
-    public boolean matchExists(String text) {
-        return matches.matchExists(text);
+    public boolean matchExists(String id) {
+        return matches.matchExists(id);
+    }
+
+    public boolean hasPlayer(String id) {
+        return players.getPlayerById(id) != null;
     }
 }

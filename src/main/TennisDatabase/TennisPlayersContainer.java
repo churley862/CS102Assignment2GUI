@@ -157,7 +157,7 @@ public class TennisPlayersContainer {
 
     }
 
-    private TennisPlayerNode getPlayerById(TennisPlayerNode node, String id) {
+    TennisPlayerNode getPlayerById(TennisPlayerNode node, String id) {
         if (node == null){return null;}
         int comp = node.getPlayer().getId().compareTo(id);
         if (comp == 0) return node;

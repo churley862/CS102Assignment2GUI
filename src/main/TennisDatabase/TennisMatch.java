@@ -9,11 +9,13 @@ public class TennisMatch {
         return player1.getId();
     }
 
+    public String getPlayer1Name() { return player1.getName(); }
 
     public String getPlayer2Id() {
         return player2.getId();
     }
 
+    public String getPlayer2Name() { return player2.getName(); }
 
     public int getDateYear() {
         return year;
