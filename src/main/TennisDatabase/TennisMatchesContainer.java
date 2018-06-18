@@ -10,6 +10,14 @@ import java.util.List;
 public class TennisMatchesContainer {
     private ObservableList<TennisMatch> matches = FXCollections.observableArrayList();
 
+    public boolean matchExists(String event) {
+        for (TennisMatch match : matches) {
+            if (match.getTournament().equals(event))
+                return true;
+        }
+        return false;
+    }
+
     // Need to ask about self contained insert and sort
 
     public void insertMatch(TennisMatch tennisMatch) {

@@ -125,4 +125,8 @@ public void parseLine(String s) {
             removeMatch(match);
         }
     }
+
+    public boolean matchExists(String text) {
+        return matches.matchExists(text);
+    }
 }

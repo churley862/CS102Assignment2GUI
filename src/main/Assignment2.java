@@ -28,6 +28,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 import TennisDatabase.*;
 import javafx.util.StringConverter;
@@ -225,6 +226,8 @@ public class Assignment2 extends Application {
         matchPane.getChildren().add(matchTable);
     }
 
+    Pattern validScores = Pattern.compile("\\s*\\d+-\\d+\\s*(,\\s*\\d+-\\d)*");
+
     private void buildAddMatchPane(Pane parent) {
         addMatchPane = new GridPane();
         addMatchPane.prefHeightProperty().bind(parent.heightProperty());
@@ -313,16 +316,40 @@ public class Assignment2 extends Application {
                     day = sc.nextInt();
                     if (sc.hasNextInt()) {
                         year = sc.nextInt();
-                        validDate = true;
+
+                        if (month > 0 && month <= 12 && day > 0 && day <= 31 && year >= 1000 && year <= 9999) {
+                            validDate = true;
+                        }
                     }
                 }
             }
+            
             if (!validDate) {
                 Alert alert = new Alert(Alert.AlertType.ERROR,
                         "Invalid date.");
                 alert.showAndWait();
                 return;
             }
+
+            if (event.getText().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR,
+                        "You must provide an tournament name.");
+                alert.showAndWait();
+                return;
+            } else if (tennisDatabase.matchExists(event.getText())) {
+                Alert alert = new Alert(Alert.AlertType.ERROR,
+                        "Tournament name must be unique.");
+                alert.showAndWait();
+                return;
+            }
+
+            if (scores.getText().isEmpty() || !validScores.matcher(scores.getText()).matches()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR,
+                        "You must provide a well formed score string (1-2, 2-3, etc).");
+                alert.showAndWait();
+                return;
+            }
+
             tennisDatabase.insertMatch(p1.getId(), p2.getId(),
                     year, month, day,
                     event.getText(), scores.getText());
