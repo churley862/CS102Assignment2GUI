@@ -8,17 +8,20 @@ public class TennisPlayerContainerIterator implements Iterator {
     private Stack<TennisPlayerNode> nodes = new Stack<TennisPlayerNode>();
     private boolean reversed = false;
 
+    // Constructor
     public TennisPlayerContainerIterator(TennisPlayersContainer players) {
         this.players = players;
         addNodes(players.root);
     }
 
+    // Constructor for the reversed order
     public TennisPlayerContainerIterator(TennisPlayersContainer players, boolean reversed) {
         this.players = players;
         this.reversed = reversed;
         addNodes(players.root);
     }
 
+    // Adds the nodes inserted to the stack
     void addNodes(TennisPlayerNode node) {
         if (node == null) return;
 
@@ -30,11 +33,13 @@ public class TennisPlayerContainerIterator implements Iterator {
     }
 
     @Override
+    // Checks if the stack has a next value
     public boolean hasNext() {
         return !nodes.empty();
     }
 
     @Override
+    // gets the stacks next value
     public Object next() {
         TennisPlayerNode result = nodes.pop();
 

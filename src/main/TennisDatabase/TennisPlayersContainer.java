@@ -7,16 +7,17 @@ import java.util.ArrayList;
 public class TennisPlayersContainer {
     ObservableList<TennisPlayer> playerList;
     TennisPlayerNode root;
-
+    // constructor
     public TennisPlayersContainer() {
         root = null;
         playerList = FXCollections.observableArrayList();
     }
-
+    // Returns the observable list of tennis players
     public ObservableList<TennisPlayer> getPlayerList() {
         return playerList;
     }
 
+    // inserts a player passed into the function into the BST in order
     public void insertPlayer(TennisPlayer player) {
         boolean newPlayer = true;
         for (TennisPlayer p : playerList) {
@@ -40,7 +41,8 @@ public class TennisPlayersContainer {
             }
         }
     }
-
+    // function to find the correct insert node
+    // passed in the current node and the player to insert
     private TennisPlayerNode findInsertNode(TennisPlayerNode node, TennisPlayer player) {
         if(node.getPlayer().compareTo(player) == 0) {
             return node;
@@ -54,6 +56,7 @@ public class TennisPlayersContainer {
         }
     }
 
+    // the function used to insert a player if it is the first node
     private void insertFirstNode(TennisPlayer player) {
         if (root != null) {
             throw new RuntimeException("tree already populated, cannot call insertFirstNode");
@@ -63,11 +66,12 @@ public class TennisPlayersContainer {
         root = node;
     }
 
+    // removes a match that is passed in recursively this is the first call
     public void removeMatch(TennisMatch match) {
         removeMatch(root, match);
         refresh();
     }
-
+    // continued from above this is the rest of the calls
     void removeMatch(TennisPlayerNode node, TennisMatch match) {
         if (node == null) return;
 
@@ -75,10 +79,8 @@ public class TennisPlayersContainer {
         node.removeMatch(match);
         removeMatch(node.getRight(), match);
     }
-
+    // checks if both players exist, if they do then the match is added, else the dummy player is created and the match is created
     public void insertMatch(TennisMatch match) {
-        // check for both players in our list
-        // if the player exists then
 
         TennisPlayerNode node = getPlayerById(match.getPlayer1Id());
         if (node == null) {
@@ -98,16 +100,16 @@ public class TennisPlayersContainer {
 
         refresh();
     }
-
+    // updates the player list
     public void refresh() {
-        // hacky way to updqte the collection
+        // hacky way to update the collection
         playerList.set(0, playerList.get(0));
     }
-
+    // Returns an arraylist of all the tennis players in the BST recursively
     public ArrayList<TennisPlayer> returnAllTennisPlayers(){
         return returnAllTennisPlayers(root);
     }
-
+    // the above function continued
     private ArrayList<TennisPlayer> returnAllTennisPlayers(TennisPlayerNode node) {
         ArrayList<TennisPlayer> tennisPlayerList = new ArrayList<TennisPlayer>();
         if (node == null){return tennisPlayerList;}
@@ -117,11 +119,11 @@ public class TennisPlayersContainer {
         return tennisPlayerList;
     }
 
-
+    // prints all players in the BST recursively
     public void printAllPlayers(){
         printAllPlayers(root);
     }
-
+    // the above function continued
     private void printAllPlayers(TennisPlayerNode node) {
         if (node == null) {return;}
 
@@ -129,11 +131,11 @@ public class TennisPlayersContainer {
         node.getPlayer().print();
         printAllPlayers(node.getRight());
     }
-
+    // The to string fuction of the players contatiner that recursively prints all in the tree
     public String toString(){
         return toString(root);
     }
-
+    // function continued from above
     private String toString(TennisPlayerNode node) {
         if (node == null) { return ""; }
         String allPlayers = toString(node.getLeft());
@@ -141,7 +143,7 @@ public class TennisPlayersContainer {
         allPlayers += toString(node.getRight());
         return allPlayers;
     }
-
+    // prints all matches of the player corresponding to the inputted ID
     public void printMatchesOfPlayer(String playerId) {
         if(getPlayerById(playerId) != null)
             getPlayerById(playerId).printMatches();
@@ -150,13 +152,13 @@ public class TennisPlayersContainer {
         }
 
     }
-
+    // Gets the player node from the inputted ID recursively
     public TennisPlayerNode getPlayerById(String id){
         return getPlayerById(root, id);
 
 
     }
-
+    // function continued from above
     TennisPlayerNode getPlayerById(TennisPlayerNode node, String id) {
         if (node == null){return null;}
         int comp = node.getPlayer().getId().compareTo(id);
@@ -164,7 +166,7 @@ public class TennisPlayersContainer {
         if (comp < 0) return getPlayerById(node.getLeft(), id);
         return getPlayerById(node.getRight(), id);
     }
-
+    // find node recursively takes the current node the parent and the player and finds it in the tree
     private TennisPlayerNode[] findNode(TennisPlayer p, TennisPlayerNode parent, TennisPlayerNode node) {
         if (parent == null || node == null) {
             TennisPlayerNode[] result = new TennisPlayerNode[2];
@@ -181,7 +183,7 @@ public class TennisPlayersContainer {
         else
             return findNode(p,node,node.getRight());
     }
-
+    // Find node takes the player and returns the node and the parent and the current node and the other in the array
     private TennisPlayerNode[] findNode(TennisPlayer p) {
         if (root == null) {
             TennisPlayerNode[] result = new TennisPlayerNode[2];
@@ -199,7 +201,7 @@ public class TennisPlayersContainer {
         else
             return findNode(p,root,root.getRight());
     }
-
+    // Sets the pointer of the parent node to the next
     private void setParentPointer(TennisPlayerNode parent, TennisPlayerNode old, TennisPlayerNode next) {
         if (parent.getLeft() == old) {
             parent.setLeft(next);
@@ -207,7 +209,7 @@ public class TennisPlayersContainer {
             parent.setRight(next);
         }
     }
-
+    // Finds the lowest node and returns it
     private TennisPlayerNode findLowestNode(TennisPlayerNode node){
         if(node.getLeft() == null){
             return node;
@@ -215,7 +217,7 @@ public class TennisPlayersContainer {
             return findLowestNode(node.getLeft());
         }
     }
-
+    // Returns a true if the inputted player is found in the tree and removed correctly
     public boolean removeNode(TennisPlayer p) {
         playerList.remove(p);
 
@@ -254,7 +256,7 @@ public class TennisPlayersContainer {
         }
         return true;
     }
-
+    // Resets the player list
     public void reset() {
         playerList.clear();
         root = null;

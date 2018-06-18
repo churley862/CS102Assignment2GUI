@@ -3,6 +3,9 @@ package TennisDatabase;
 public class TennisMatchesList {
     private TennisMatchesNode head = null;
 
+    // input: TennisMatch
+    // Desc: the match that is inputted is removed
+    // output: if the removal is a success it returns true else returns false
     public boolean removeMatch(TennisMatch m) {
         TennisMatchesNode node = head;
 
@@ -20,7 +23,8 @@ public class TennisMatchesList {
         }
         return false;
     }
-
+    // input TennisMatch to be inserted
+    // Desc: inserts the match into the container
     public void insertMatch(TennisMatch m) {
         TennisMatchesNode node = new TennisMatchesNode(m);
 
@@ -48,7 +52,7 @@ public class TennisMatchesList {
             }
         }
     }
-
+    // Prints all the matches in the list
     public void printMatches(){
         TennisMatchesNode node = head;
         if (node != null) {

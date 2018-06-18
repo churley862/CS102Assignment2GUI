@@ -4,7 +4,7 @@ public class TennisPlayerNode  {
     private TennisPlayer player;
     private TennisPlayerNode left,right;
     private TennisMatchesList list;
-
+    // Constructor
     public TennisPlayerNode(TennisPlayer player) {
         this.player = player;
         list = new TennisMatchesList();
@@ -12,7 +12,7 @@ public class TennisPlayerNode  {
         left = null;
         right = null;
     }
-
+    // Getters
     public TennisPlayer getPlayer() {
         return player;
     }
@@ -25,10 +25,11 @@ public class TennisPlayerNode  {
         return right;
     }
 
+    // Prints the matches in the list
     public void printMatches(){
         list.printMatches();
     }
-
+    // inserts the match inputted into the list
     public void insertMatch(TennisMatch m){
         list.insertMatch(m);
         if (m.getWinnerId().equals(player.getId())) {
@@ -37,10 +38,7 @@ public class TennisPlayerNode  {
             player.addLoss();
         }
     }
-    public void removeAllMatches(){
-
-    }
-
+    // Removes the match inputted
     public void removeMatch(TennisMatch m) {
         if (list.removeMatch(m)) {
             if (m.getWinnerId().equals(player.getId())) {
@@ -50,7 +48,7 @@ public class TennisPlayerNode  {
             }
         }
     }
-
+    // Setters
     public void setLeft(TennisPlayerNode n) { left = n;
     }
 
@@ -60,6 +58,7 @@ public class TennisPlayerNode  {
     public void setPlayer(TennisPlayer player) {
         this.player = player;
     }
+    // The to String function just returns the player toString function
     public String toString(){
         return player.toString();
     }

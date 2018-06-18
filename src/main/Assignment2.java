@@ -34,6 +34,8 @@ public class Assignment2 extends Application {
     private TableView table = new TableView();
     private TennisDatabase tennisDatabase = new TennisDatabase();
 
+    // input : Stage from the start section
+    // Desc. : Creates a button for importing players
     private void buttonImport(Stage stage) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Import Tennis Players");
@@ -50,6 +52,8 @@ public class Assignment2 extends Application {
         }
     }
 
+    // input : Stage from the start section
+    // Desc. : Creates a button for exporting players
     public void buttonExport(Stage stage) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Export Tennis Players");
@@ -73,6 +77,8 @@ public class Assignment2 extends Application {
     private BorderPane matchPane;
     private TableView playerTable;
 
+    // input : Pane from the start section
+    // Desc. : Builds the pane containing the player table
     private void buildPlayerPane(Pane parent) {
         playerPane = new BorderPane();
         playerPane.prefHeightProperty().bind(parent.heightProperty());
@@ -125,7 +131,8 @@ public class Assignment2 extends Application {
         playerTable.autosize();
         playerPane.setBottom(new Label("Press Backspace to delete player."));
     }
-
+    // input : Pane from the start section
+    // Desc. : Creates a pane for adding players validates inside
     private void buildAddPlayerPane(Pane parent) {
         addPlayerPane = new GridPane();
         addPlayerPane.prefHeightProperty().bind(parent.heightProperty());
@@ -241,7 +248,8 @@ public class Assignment2 extends Application {
             bodyPane.getChildren().setAll(playerPane);
         });
     }
-
+    // input : pane from the start section
+    // Desc. : Creates a pane for showing matches
     private void buildMatchPane(Pane parent) {
         matchPane = new BorderPane();
         matchPane.prefHeightProperty().bind(parent.heightProperty());
@@ -283,6 +291,8 @@ public class Assignment2 extends Application {
 
     Pattern validScores = Pattern.compile("\\s*\\d+-\\d+\\s*(,\\s*\\d+-\\d)*");
 
+    // input : pane from the start section
+    // Desc. : Creates the pane to add matches validating inside
     private void buildAddMatchPane(Pane parent) {
         addMatchPane = new GridPane();
         addMatchPane.prefHeightProperty().bind(parent.heightProperty());
@@ -418,7 +428,8 @@ public class Assignment2 extends Application {
         });
     }
 
-    //TennisDatabase tennisDatabase = new TennisDatabase();
+    // input : Stage from main
+    // Desc. : Creates the main screen and builds the whole table
     @Override
     public void start(Stage primaryStage) throws Exception {
         SplitPane spane = new SplitPane();
