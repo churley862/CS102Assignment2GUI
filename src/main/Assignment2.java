@@ -15,10 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
@@ -45,6 +42,8 @@ public class Assignment2 extends Application {
         if (file != null) {
             try {
                 tennisDatabase.loadFromFile(file.getName());
+                matchPane.autosize();
+                playerPane.autosize();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -68,14 +67,14 @@ public class Assignment2 extends Application {
     }
 
     private Pane bodyPane;
-    private Pane playerPane;
+    private BorderPane playerPane;
     private GridPane addPlayerPane;
     private GridPane addMatchPane;
-    private Pane matchPane;
+    private BorderPane matchPane;
     private TableView playerTable;
 
     private void buildPlayerPane(Pane parent) {
-        playerPane = new Pane();
+        playerPane = new BorderPane();
         playerPane.prefHeightProperty().bind(parent.heightProperty());
         playerPane.prefWidthProperty().bind(parent.widthProperty());
 
@@ -121,7 +120,10 @@ public class Assignment2 extends Application {
                 }
             }
         });
-        playerPane.getChildren().add(playerTable);
+
+        playerPane.setCenter(playerTable);
+        playerTable.autosize();
+        playerPane.setBottom(new Label("Press Backspace to delete player."));
     }
 
     private void buildAddPlayerPane(Pane parent) {
@@ -241,7 +243,7 @@ public class Assignment2 extends Application {
     }
 
     private void buildMatchPane(Pane parent) {
-        matchPane = new Pane();
+        matchPane = new BorderPane();
         matchPane.prefHeightProperty().bind(parent.heightProperty());
         matchPane.prefWidthProperty().bind(parent.widthProperty());
 
@@ -274,7 +276,9 @@ public class Assignment2 extends Application {
                }
            }
         });
-        matchPane.getChildren().add(matchTable);
+        matchPane.setCenter(matchTable);
+        matchPane.autosize();
+        matchPane.setBottom(new Label("(W) Denotes match winner.     Press Backspace to delete match."));
     }
 
     Pattern validScores = Pattern.compile("\\s*\\d+-\\d+\\s*(,\\s*\\d+-\\d)*");
@@ -435,8 +439,8 @@ public class Assignment2 extends Application {
         spane.getItems().addAll(bbar, bodyPane);
 
         primaryStage.setTitle("Tennis Database Assignment 2");
-        primaryStage.setWidth(800);
-        primaryStage.setHeight(600);
+        primaryStage.setWidth(950);
+        primaryStage.setHeight(500);
 
         Button showPlayers = new Button("Show Players");
         showPlayers.setOnAction(event -> {
@@ -475,7 +479,7 @@ public class Assignment2 extends Application {
 
         bbar.addAll(showPlayers, showMatches, addPlayer, addMatch, exportButton, importButton,resetButton,quitButton);
 
-        Scene scene = new Scene(spane, 800, 600);
+        Scene scene = new Scene(spane, 950, 500);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
