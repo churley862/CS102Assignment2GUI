@@ -9,13 +9,13 @@ public class TennisMatch {
         return player1.getId();
     }
 
-    public String getPlayer1Name() { return player1.getName(); }
+    public String getPlayer1Name() { return player1.getName() + ((getWinner() == 1) ? " (W)" : ""); }
 
     public String getPlayer2Id() {
         return player2.getId();
     }
 
-    public String getPlayer2Name() { return player2.getName(); }
+    public String getPlayer2Name() { return player2.getName() + ((getWinner() == 2) ? " (W)" : ""); }
 
     public int getDateYear() {
         return year;
@@ -131,9 +131,15 @@ public class TennisMatch {
         scores.useDelimiter(",");
         int score2 = scores.nextInt();
 
+        if (score1 > score2) {
+            win += 1;
+        } else {
+            win -= 1;
+        }
+
         if (scores.hasNext()) {
             scores.skip(",");
-            return recursiveGetWinner(scores, (score1 > score2) ? win + 1 : win - 1);
+            return recursiveGetWinner(scores, win);
         } else {
             if (win == 0) return -1;
             return (win > 0) ? 1 : 2;
